@@ -1,0 +1,17 @@
+C:\Users\medaw\source\repos\Construction\Construction\bin\Release\constructionDatabase.mdf
+C:\Users\medaw\source\repos\Construction\Construction\bin\Release\constructionDatabase_log.ldf
+C:\Users\medaw\source\repos\Construction\Construction\bin\Release\Construction.exe.config
+C:\Users\medaw\source\repos\Construction\Construction\bin\Release\Construction.exe
+C:\Users\medaw\source\repos\Construction\Construction\bin\Release\Construction.pdb
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.csproj.AssemblyReference.cache
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.csproj.SuggestedBindingRedirects.cache
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Homepage.resources
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Invoicings.resources
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Login.resources
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Payments.resources
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Properties.Resources.resources
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Stock.resources
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.csproj.GenerateResource.cache
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.csproj.CoreCompileInputs.cache
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.exe
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.pdb

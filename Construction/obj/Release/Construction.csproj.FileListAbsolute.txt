@@ -10,6 +10,7 @@ C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.I
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Login.resources
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Payments.resources
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Properties.Resources.resources
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Sales.resources
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Stock.resources
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.csproj.GenerateResource.cache
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.csproj.CoreCompileInputs.cache

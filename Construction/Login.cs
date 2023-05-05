@@ -113,5 +113,10 @@ namespace Construction
             if (e.KeyCode == Keys.Enter)
                 login();
         }
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

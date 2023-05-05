@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using Microsoft.SqlServer.Server;
+using System.Collections;
 
 namespace Construction
 {
@@ -32,12 +34,13 @@ namespace Construction
 
             try
             {
+                if (String.IsNullOrEmpty(tbPaymentLimit.Text.ToString()))
+                    return;
                 int limit = Int32.Parse(tbPaymentLimit.Text.ToString());
                 string query = "SELECT TOP " + limit + " * FROM MiscPayments WHERE DateTime BETWEEN '" + dtPickerFrom.Value + "' AND '" + dtPickerTo.Value + "';";
                 SqlDataAdapter adapter = new SqlDataAdapter(query, con);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
-                dgvPayments.DataSource = null;
                 dgvPayments.DataSource = dt;
             }
             catch (Exception msg)
@@ -105,17 +108,13 @@ namespace Construction
 
             try
             {
-                String query = "INSERT INTO MiscPayments (Description, Paid, DateTime) VALUES (@Description, @Paid, @DateTime)";
-                SqlCommand cmd = new SqlCommand(query, con);
+                SqlCommand cmd = new SqlCommand("Procedure", con);
+                cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Description", tbPDesc.Text.ToString());
                 cmd.Parameters.AddWithValue("@Paid", Double.Parse(tbPPaid.Text.ToString()));
                 cmd.Parameters.AddWithValue("@DateTime", DateTime.Now);
+
                 cmd.ExecuteNonQuery();
-                dgvPayments.Invalidate();
-                dgvPayments.Refresh();
-                loadData();
-                dgvPayments.Refresh();
-                MessageBox.Show("Payment of " + tbPPaid.Text.ToString() + " has been successfully added");
                 tbPPaid.Text = "";
                 tbPDesc.Text = "";
             }
@@ -132,7 +131,33 @@ namespace Construction
             }
 
 
-            loadData();
+            dgvPayments.Invalidate();
+            dgvPayments.Refresh();
+            dgvPayments.DataSource = null;
+            dgvPayments.Refresh();
+
+            MessageBox.Show("Payment of " + tbPPaid.Text.ToString() + " has been successfully added");
+            reloadData();
+            
+
+
+        }
+
+
+        //For some reason, select query is not showing the latest result if I use a normal loadData() after inserting
+        //I found the problem was related to the datetimepicker
+        private void reloadData()
+        {
+            if (String.IsNullOrEmpty(tbPaymentLimit.Text.ToString()))
+                return;
+            int limit = Int32.Parse(tbPaymentLimit.Text.ToString());
+            con.Open();
+            SqlDataAdapter adapter = new SqlDataAdapter("SELECT TOP " + limit + " * FROM MiscPayments  WHERE DateTime BETWEEN '" + dtPickerFrom.Value + "' AND '" + DateTime.Now + "'; ", con);
+            DataTable dt = new DataTable();
+            adapter.Fill(dt);
+            dgvPayments.DataSource = null;
+            dgvPayments.DataSource = dt;
+            con.Close();
         }
     }
 }

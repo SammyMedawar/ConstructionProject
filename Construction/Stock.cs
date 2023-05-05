@@ -28,6 +28,12 @@ namespace Construction
         {
             InitializeComponent();
             loadData();
+
+            //make columns unsortable
+            foreach (DataGridViewColumn column in dgvMaterialsHistory.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
         }
 
         private void loadData()
@@ -49,7 +55,7 @@ namespace Construction
                 adapter.Fill(dt);
                 dgvMaterials.DataSource = dt;
 
-                string query2 = "SELECT TOP " + limit + " Description, Amount, Type from MaterialsRecords";
+                string query2 = "SELECT TOP " + limit + " Description, Amount, Type FROM MaterialsRecords ORDER BY DateTime DESC";
                 SqlDataAdapter adapter2 = new SqlDataAdapter(query2, con);
                 DataTable dt2 = new DataTable();
                 adapter2.Fill(dt2);

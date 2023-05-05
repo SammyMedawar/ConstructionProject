@@ -43,6 +43,8 @@
             this.btnHomepage = new System.Windows.Forms.Button();
             this.dgvPayments = new System.Windows.Forms.DataGridView();
             this.label3 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.labelTotalPaid = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPayments)).BeginInit();
             this.SuspendLayout();
             // 
@@ -98,7 +100,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(671, 81);
+            this.label5.Location = new System.Drawing.Point(708, 81);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(20, 13);
             this.label5.TabIndex = 28;
@@ -107,7 +109,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(429, 81);
+            this.label4.Location = new System.Drawing.Point(466, 81);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(30, 13);
             this.label4.TabIndex = 27;
@@ -115,7 +117,7 @@
             // 
             // dtPickerTo
             // 
-            this.dtPickerTo.Location = new System.Drawing.Point(695, 77);
+            this.dtPickerTo.Location = new System.Drawing.Point(732, 77);
             this.dtPickerTo.Name = "dtPickerTo";
             this.dtPickerTo.Size = new System.Drawing.Size(200, 20);
             this.dtPickerTo.TabIndex = 26;
@@ -123,7 +125,7 @@
             // 
             // dtPickerFrom
             // 
-            this.dtPickerFrom.Location = new System.Drawing.Point(465, 77);
+            this.dtPickerFrom.Location = new System.Drawing.Point(502, 77);
             this.dtPickerFrom.Name = "dtPickerFrom";
             this.dtPickerFrom.Size = new System.Drawing.Size(200, 20);
             this.dtPickerFrom.TabIndex = 25;
@@ -141,7 +143,7 @@
             // 
             // tbPaymentLimit
             // 
-            this.tbPaymentLimit.Location = new System.Drawing.Point(399, 107);
+            this.tbPaymentLimit.Location = new System.Drawing.Point(430, 77);
             this.tbPaymentLimit.Name = "tbPaymentLimit";
             this.tbPaymentLimit.Size = new System.Drawing.Size(29, 20);
             this.tbPaymentLimit.TabIndex = 29;
@@ -193,11 +195,33 @@
             this.label3.TabIndex = 34;
             this.label3.Text = "Other Payments";
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(565, 38);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(94, 20);
+            this.label6.TabIndex = 35;
+            this.label6.Text = "Total Paid:";
+            // 
+            // labelTotalPaid
+            // 
+            this.labelTotalPaid.AutoSize = true;
+            this.labelTotalPaid.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTotalPaid.Location = new System.Drawing.Point(665, 38);
+            this.labelTotalPaid.Name = "labelTotalPaid";
+            this.labelTotalPaid.Size = new System.Drawing.Size(39, 20);
+            this.labelTotalPaid.TabIndex = 36;
+            this.labelTotalPaid.Text = "100";
+            // 
             // Payments
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 511);
+            this.Controls.Add(this.labelTotalPaid);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.dgvPayments);
             this.Controls.Add(this.btnLogout);
@@ -217,6 +241,7 @@
             this.Name = "Payments";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Payments";
+            this.Load += new System.EventHandler(this.Payments_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvPayments)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -240,5 +265,7 @@
         private System.Windows.Forms.Button btnHomepage;
         private System.Windows.Forms.DataGridView dgvPayments;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label labelTotalPaid;
     }
 }

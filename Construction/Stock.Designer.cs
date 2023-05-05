@@ -51,7 +51,7 @@
             // tbMOne
             // 
             this.tbMOne.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbMOne.Location = new System.Drawing.Point(202, 143);
+            this.tbMOne.Location = new System.Drawing.Point(180, 114);
             this.tbMOne.Name = "tbMOne";
             this.tbMOne.Size = new System.Drawing.Size(103, 26);
             this.tbMOne.TabIndex = 5;
@@ -60,7 +60,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(86, 146);
+            this.label1.Location = new System.Drawing.Point(64, 117);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(99, 20);
             this.label1.TabIndex = 6;
@@ -70,7 +70,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(86, 192);
+            this.label2.Location = new System.Drawing.Point(64, 163);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(98, 20);
             this.label2.TabIndex = 8;
@@ -79,7 +79,7 @@
             // tbMTwo
             // 
             this.tbMTwo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbMTwo.Location = new System.Drawing.Point(202, 189);
+            this.tbMTwo.Location = new System.Drawing.Point(180, 160);
             this.tbMTwo.Name = "tbMTwo";
             this.tbMTwo.Size = new System.Drawing.Size(103, 26);
             this.tbMTwo.TabIndex = 7;
@@ -88,7 +88,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(86, 240);
+            this.label3.Location = new System.Drawing.Point(64, 211);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(110, 20);
             this.label3.TabIndex = 10;
@@ -97,7 +97,7 @@
             // tbMThree
             // 
             this.tbMThree.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbMThree.Location = new System.Drawing.Point(202, 237);
+            this.tbMThree.Location = new System.Drawing.Point(180, 208);
             this.tbMThree.Name = "tbMThree";
             this.tbMThree.Size = new System.Drawing.Size(103, 26);
             this.tbMThree.TabIndex = 9;
@@ -106,7 +106,7 @@
             // 
             this.radioAdd.AutoSize = true;
             this.radioAdd.Checked = true;
-            this.radioAdd.Location = new System.Drawing.Point(141, 281);
+            this.radioAdd.Location = new System.Drawing.Point(119, 252);
             this.radioAdd.Name = "radioAdd";
             this.radioAdd.Size = new System.Drawing.Size(44, 17);
             this.radioAdd.TabIndex = 12;
@@ -117,7 +117,7 @@
             // radioSubtract
             // 
             this.radioSubtract.AutoSize = true;
-            this.radioSubtract.Location = new System.Drawing.Point(202, 281);
+            this.radioSubtract.Location = new System.Drawing.Point(180, 252);
             this.radioSubtract.Name = "radioSubtract";
             this.radioSubtract.Size = new System.Drawing.Size(70, 17);
             this.radioSubtract.TabIndex = 13;
@@ -128,7 +128,7 @@
             // btnStockUpdate
             // 
             this.btnStockUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStockUpdate.Location = new System.Drawing.Point(90, 315);
+            this.btnStockUpdate.Location = new System.Drawing.Point(68, 286);
             this.btnStockUpdate.Name = "btnStockUpdate";
             this.btnStockUpdate.Size = new System.Drawing.Size(215, 37);
             this.btnStockUpdate.TabIndex = 14;
@@ -173,6 +173,8 @@
             // 
             // dgvMaterialsHistory
             // 
+            this.dgvMaterialsHistory.AllowUserToAddRows = false;
+            this.dgvMaterialsHistory.AllowUserToDeleteRows = false;
             this.dgvMaterialsHistory.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvMaterialsHistory.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvMaterialsHistory.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -206,7 +208,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(137, 92);
+            this.label4.Location = new System.Drawing.Point(115, 63);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(98, 20);
             this.label4.TabIndex = 21;

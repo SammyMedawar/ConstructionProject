@@ -34,6 +34,7 @@ namespace Construction
 
             try
             {
+                double total = 0;
                 if (String.IsNullOrEmpty(tbPaymentLimit.Text.ToString()))
                     return;
                 int limit = Int32.Parse(tbPaymentLimit.Text.ToString());
@@ -42,6 +43,13 @@ namespace Construction
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
                 dgvPayments.DataSource = dt;
+
+                foreach (DataGridViewRow row in dgvPayments.Rows)
+                {
+                    total = total + Convert.ToDouble(row.Cells[2].Value);
+                }
+
+                labelTotalPaid.Text = total.ToString();
             }
             catch (Exception msg)
             {
@@ -98,7 +106,10 @@ namespace Construction
         private void btnPaymentUpdate_Click(object sender, EventArgs e)
         {
             if (String.IsNullOrEmpty(tbPPaid.Text.ToString()) || String.IsNullOrEmpty(tbPDesc.Text.ToString()))
-            { return; }
+            {
+                MessageBox.Show("Please fill in all the fields correctly");
+                return; 
+            }
 
             //check if connection is closed, if so open it
             if (con.State != ConnectionState.Open)
@@ -148,6 +159,8 @@ namespace Construction
         //I found the problem was related to the datetimepicker
         private void reloadData()
         {
+            double total = 0;
+
             if (String.IsNullOrEmpty(tbPaymentLimit.Text.ToString()))
                 return;
             int limit = Int32.Parse(tbPaymentLimit.Text.ToString());
@@ -158,6 +171,18 @@ namespace Construction
             dgvPayments.DataSource = null;
             dgvPayments.DataSource = dt;
             con.Close();
+
+            foreach (DataGridViewRow row in dgvPayments.Rows)
+            {
+                total = total + Convert.ToDouble(row.Cells[2].Value);
+            }
+
+            labelTotalPaid.Text = total.ToString();
+        }
+
+        private void Payments_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

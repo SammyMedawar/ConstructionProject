@@ -53,37 +53,46 @@ namespace Construction
                 con.Open();
             }
 
-
-            //create search query string
-            string query = "SELECT * FROM Users WHERE Username = @username AND Password = @password";
-
-            //create an object SqlCommand that will take the query and the connection string
-            SqlCommand cmd = new SqlCommand(query, con);
-
-            //explain what the parameters with @ in the conenction string mean
-            cmd.Parameters.AddWithValue("@username", username);
-            cmd.Parameters.AddWithValue("@password", password);
-
-
-            //create a data reader that will execute the query
-            SqlDataReader dr = cmd.ExecuteReader();
-
-            //if the data reader finds the row, do this
-            if (dr.Read())
+            try
             {
-                //create the homepage
-                Homepage toPage = new Homepage();
-                //show the homepage
-                toPage.Show();
-                //hide the current page
-                this.Hide();
+                //create search query string
+                string query = "SELECT * FROM Users WHERE Username = @username AND Password = @password";
+
+                //create an object SqlCommand that will take the query and the connection string
+                SqlCommand cmd = new SqlCommand(query, con);
+
+                //explain what the parameters with @ in the conenction string mean
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@password", password);
+
+
+                //create a data reader that will execute the query
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                //if the data reader finds the row, do this
+                if (dr.Read())
+                {
+                    //create the homepage
+                    Homepage toPage = new Homepage();
+                    //show the homepage
+                    toPage.Show();
+                    //hide the current page
+                    this.Hide();
+                }
+
+                else
+                {
+                    MessageBox.Show("Invalid Username or Password!");
+
+                }
+
+            }
+            catch(Exception msg)
+            {
+                MessageBox.Show("An error has occured! Please try again");
             }
 
-            else
-            {
-                MessageBox.Show("Invalid Username or Password!");
-
-            }
+            
 
             //close the connection if it is still open
             if (con.State == ConnectionState.Open)

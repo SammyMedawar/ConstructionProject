@@ -21,6 +21,7 @@ namespace Construction
         {
             InitializeComponent();
             loadData();
+            
         }
 
         private void loadData()
@@ -38,7 +39,7 @@ namespace Construction
                 if (String.IsNullOrEmpty(tbPaymentLimit.Text.ToString()))
                     return;
                 int limit = Int32.Parse(tbPaymentLimit.Text.ToString());
-                string query = "SELECT TOP " + limit + " * FROM MiscPayments WHERE DateTime BETWEEN '" + dtPickerFrom.Value + "' AND '" + dtPickerTo.Value + "';";
+                string query = "SELECT TOP " + limit + " Description, Paid, DateTime FROM MiscPayments WHERE DateTime BETWEEN '" + dtPickerFrom.Value + "' AND '" + dtPickerTo.Value + "';";
                 SqlDataAdapter adapter = new SqlDataAdapter(query, con);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
@@ -46,10 +47,10 @@ namespace Construction
 
                 foreach (DataGridViewRow row in dgvPayments.Rows)
                 {
-                    total = total + Convert.ToDouble(row.Cells[2].Value);
+                    total = total + Convert.ToDouble(row.Cells[1].Value);
                 }
 
-                labelTotalPaid.Text = total.ToString();
+                labelTotalPaid.Text = String.Format("{0:0.00}", total);
             }
             catch (Exception msg)
             {
@@ -105,6 +106,8 @@ namespace Construction
 
         private void btnPaymentUpdate_Click(object sender, EventArgs e)
         {
+            bool hasErred = false;
+
             if (String.IsNullOrEmpty(tbPPaid.Text.ToString()) || String.IsNullOrEmpty(tbPDesc.Text.ToString()))
             {
                 MessageBox.Show("Please fill in all the fields correctly");
@@ -133,6 +136,8 @@ namespace Construction
             catch (Exception msg)
             {
                 MessageBox.Show("Oops! An error has occured. Please recheck what you entered");
+                con.Close();
+                return;
             }
 
             //close the connection if it is still open
@@ -165,7 +170,9 @@ namespace Construction
                 return;
             int limit = Int32.Parse(tbPaymentLimit.Text.ToString());
             con.Open();
-            SqlDataAdapter adapter = new SqlDataAdapter("SELECT TOP " + limit + " * FROM MiscPayments  WHERE DateTime BETWEEN '" + dtPickerFrom.Value + "' AND '" + DateTime.Now + "'; ", con);
+            DateTime now = DateTime.Now;
+            DateTime newDateTime = new DateTime(now.Year, now.Month, now.Day, 23, 59, 0);
+            SqlDataAdapter adapter = new SqlDataAdapter("SELECT TOP " + limit + " Description, Paid, DateTime FROM MiscPayments  WHERE DateTime BETWEEN '" + dtPickerFrom.Value + "' AND '" + DateTime.Now + "' OR DateTime = '"+newDateTime+"'; ", con);
             DataTable dt = new DataTable();
             adapter.Fill(dt);
             dgvPayments.DataSource = null;
@@ -174,10 +181,11 @@ namespace Construction
 
             foreach (DataGridViewRow row in dgvPayments.Rows)
             {
-                total = total + Convert.ToDouble(row.Cells[2].Value);
+                total = total + Convert.ToDouble(row.Cells[1].Value);
             }
 
-            labelTotalPaid.Text = total.ToString();
+            labelTotalPaid.Text = String.Format("{0:0.00}", total);
+
         }
 
         private void Payments_Load(object sender, EventArgs e)

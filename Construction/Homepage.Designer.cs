@@ -53,7 +53,7 @@
             this.btnInvoicing.Name = "btnInvoicing";
             this.btnInvoicing.Size = new System.Drawing.Size(111, 65);
             this.btnInvoicing.TabIndex = 1;
-            this.btnInvoicing.Text = "Invoicings";
+            this.btnInvoicing.Text = "Invoices";
             this.btnInvoicing.UseVisualStyleBackColor = true;
             this.btnInvoicing.Click += new System.EventHandler(this.btnInvoicing_Click);
             // 
@@ -64,7 +64,7 @@
             this.btnPayments.Name = "btnPayments";
             this.btnPayments.Size = new System.Drawing.Size(111, 65);
             this.btnPayments.TabIndex = 2;
-            this.btnPayments.Text = "Payments";
+            this.btnPayments.Text = "Other Payments";
             this.btnPayments.UseVisualStyleBackColor = true;
             this.btnPayments.Click += new System.EventHandler(this.btnPayments_Click);
             // 

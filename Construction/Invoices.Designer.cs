@@ -218,7 +218,7 @@
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(312, 37);
             this.btnAdd.TabIndex = 56;
-            this.btnAdd.Text = "Add";
+            this.btnAdd.Text = "Update";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
@@ -384,10 +384,10 @@
             this.tbM2Amount.ForeColor = System.Drawing.Color.Gray;
             this.tbM2Amount.Location = new System.Drawing.Point(161, 233);
             this.tbM2Amount.Name = "tbM2Amount";
-            this.tbM2Amount.PlaceHolderText = "Amount";
+            this.tbM2Amount.PlaceHolderText = "Weight";
             this.tbM2Amount.Size = new System.Drawing.Size(80, 26);
             this.tbM2Amount.TabIndex = 51;
-            this.tbM2Amount.Text = "Amount";
+            this.tbM2Amount.Text = "Weight";
             // 
             // tbM3Price
             // 

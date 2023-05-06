@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Construction
 {
-    internal class PlaceholderTextBox : TextBox
+    public class PlaceholderTextBox : TextBox
     {
         public bool isPlaceHolder = true;
         string _placeHolderText;
@@ -58,12 +58,12 @@ namespace Construction
             LostFocus += setPlaceholder;
         }
 
-        private void setPlaceholder(object sender, EventArgs e)
+        public void setPlaceholder(object sender, EventArgs e)
         {
             setPlaceholder();
         }
 
-        private void removePlaceHolder(object sender, EventArgs e)
+        public void removePlaceHolder(object sender, EventArgs e)
         {
             removePlaceHolder();
         }

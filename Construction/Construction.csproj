@@ -71,12 +71,6 @@
     <Compile Include="Homepage.Designer.cs">
       <DependentUpon>Homepage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Invoices.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Invoices.Designer.cs">
-      <DependentUpon>Invoices.cs</DependentUpon>
-    </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,6 +81,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>myDB.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="NewInvoices.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewInvoices.Designer.cs">
+      <DependentUpon>NewInvoices.cs</DependentUpon>
     </Compile>
     <Compile Include="Payments.cs">
       <SubType>Form</SubType>
@@ -111,14 +111,20 @@
     <Compile Include="Stock.Designer.cs">
       <DependentUpon>Stock.cs</DependentUpon>
     </Compile>
+    <Compile Include="UpdateInvoice.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpdateInvoice.Designer.cs">
+      <DependentUpon>UpdateInvoice.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Homepage.resx">
       <DependentUpon>Homepage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Invoices.resx">
-      <DependentUpon>Invoices.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewInvoices.resx">
+      <DependentUpon>NewInvoices.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Payments.resx">
       <DependentUpon>Payments.cs</DependentUpon>
@@ -137,6 +143,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stock.resx">
       <DependentUpon>Stock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UpdateInvoice.resx">
+      <DependentUpon>UpdateInvoice.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="myDB.xsc">
       <DependentUpon>myDB.xsd</DependentUpon>

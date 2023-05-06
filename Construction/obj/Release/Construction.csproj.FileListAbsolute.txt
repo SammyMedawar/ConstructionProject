@@ -7,12 +7,13 @@ C:\Users\medaw\source\repos\Construction\Construction\bin\Release\System.Data.SQ
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.csproj.AssemblyReference.cache
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.csproj.SuggestedBindingRedirects.cache
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Homepage.resources
-C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Invoices.resources
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Login.resources
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.NewInvoices.resources
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Payments.resources
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Properties.Resources.resources
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Sales.resources
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Stock.resources
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.UpdateInvoice.resources
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.csproj.GenerateResource.cache
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.csproj.CoreCompileInputs.cache
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.csproj.CopyComplete

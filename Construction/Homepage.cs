@@ -41,7 +41,7 @@ namespace Construction
         private void btnInvoicing_Click(object sender, EventArgs e)
         {
             //create the invoicing page
-            Invoices toPage = new Invoices();
+            NewInvoices toPage = new NewInvoices();
             //show the invoicing page
             toPage.Show();
             //hide the current page

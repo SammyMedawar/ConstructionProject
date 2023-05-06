@@ -38,7 +38,7 @@
             // btnStock
             // 
             this.btnStock.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStock.Location = new System.Drawing.Point(218, 206);
+            this.btnStock.Location = new System.Drawing.Point(412, 266);
             this.btnStock.Name = "btnStock";
             this.btnStock.Size = new System.Drawing.Size(111, 65);
             this.btnStock.TabIndex = 0;
@@ -49,7 +49,7 @@
             // btnInvoicing
             // 
             this.btnInvoicing.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnInvoicing.Location = new System.Drawing.Point(369, 206);
+            this.btnInvoicing.Location = new System.Drawing.Point(563, 266);
             this.btnInvoicing.Name = "btnInvoicing";
             this.btnInvoicing.Size = new System.Drawing.Size(111, 65);
             this.btnInvoicing.TabIndex = 1;
@@ -60,7 +60,7 @@
             // btnPayments
             // 
             this.btnPayments.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPayments.Location = new System.Drawing.Point(530, 206);
+            this.btnPayments.Location = new System.Drawing.Point(724, 266);
             this.btnPayments.Name = "btnPayments";
             this.btnPayments.Size = new System.Drawing.Size(111, 65);
             this.btnPayments.TabIndex = 2;
@@ -71,7 +71,7 @@
             // btnSales
             // 
             this.btnSales.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSales.Location = new System.Drawing.Point(682, 206);
+            this.btnSales.Location = new System.Drawing.Point(876, 266);
             this.btnSales.Name = "btnSales";
             this.btnSales.Size = new System.Drawing.Size(111, 65);
             this.btnSales.TabIndex = 3;
@@ -82,7 +82,7 @@
             // btnLogout
             // 
             this.btnLogout.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLogout.Location = new System.Drawing.Point(12, 421);
+            this.btnLogout.Location = new System.Drawing.Point(38, 579);
             this.btnLogout.Name = "btnLogout";
             this.btnLogout.Size = new System.Drawing.Size(111, 65);
             this.btnLogout.TabIndex = 4;
@@ -94,7 +94,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 511);
+            this.ClientSize = new System.Drawing.Size(1294, 668);
             this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.btnSales);
             this.Controls.Add(this.btnPayments);

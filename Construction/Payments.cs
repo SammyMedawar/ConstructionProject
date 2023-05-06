@@ -21,7 +21,7 @@ namespace Construction
         {
             InitializeComponent();
             loadData();
-            
+
         }
 
         private void loadData()
@@ -39,7 +39,9 @@ namespace Construction
                 if (String.IsNullOrEmpty(tbPaymentLimit.Text.ToString()))
                     return;
                 int limit = Int32.Parse(tbPaymentLimit.Text.ToString());
-                string query = "SELECT TOP " + limit + " Description, Paid, DateTime FROM MiscPayments WHERE DateTime BETWEEN '" + dtPickerFrom.Value + "' AND '" + dtPickerTo.Value + "';";
+                DateTime oldTo = dtPickerTo.Value;
+                DateTime newTo = new DateTime(oldTo.Year, oldTo.Month, oldTo.Day, 23, 59, 59);
+                string query = "SELECT TOP " + limit + " Description, Paid, DateTime FROM MiscPayments WHERE DateTime BETWEEN '" + dtPickerFrom.Value + "' AND '" + newTo + "' ORDER BY DateTime DESC;";
                 SqlDataAdapter adapter = new SqlDataAdapter(query, con);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
@@ -172,7 +174,7 @@ namespace Construction
             con.Open();
             DateTime now = DateTime.Now;
             DateTime newDateTime = new DateTime(now.Year, now.Month, now.Day, 23, 59, 0);
-            SqlDataAdapter adapter = new SqlDataAdapter("SELECT TOP " + limit + " Description, Paid, DateTime FROM MiscPayments  WHERE DateTime BETWEEN '" + dtPickerFrom.Value + "' AND '" + DateTime.Now + "' OR DateTime = '"+newDateTime+"'; ", con);
+            SqlDataAdapter adapter = new SqlDataAdapter("SELECT TOP " + limit + " Description, Paid, DateTime FROM MiscPayments  WHERE DateTime BETWEEN '" + dtPickerFrom.Value + "' AND '" + new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59,59) + "' OR DateTime = '"+newDateTime+"' ORDER BY DateTime DESC; ", con);
             DataTable dt = new DataTable();
             adapter.Fill(dt);
             dgvPayments.DataSource = null;
@@ -191,6 +193,16 @@ namespace Construction
         private void Payments_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void dgvPayments_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            dgvPayments.ClearSelection();
+            //Make columns of datagridview unsortable
+            foreach (DataGridViewColumn column in dgvPayments.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
         }
     }
 }

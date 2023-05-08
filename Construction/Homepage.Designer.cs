@@ -28,15 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btnStock = new System.Windows.Forms.Button();
             this.btnInvoicing = new System.Windows.Forms.Button();
             this.btnPayments = new System.Windows.Forms.Button();
             this.btnSales = new System.Windows.Forms.Button();
             this.btnLogout = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // btnStock
             // 
+            this.btnStock.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStock.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStock.Location = new System.Drawing.Point(412, 266);
             this.btnStock.Name = "btnStock";
@@ -48,6 +53,9 @@
             // 
             // btnInvoicing
             // 
+            this.btnInvoicing.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnInvoicing.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnInvoicing.Location = new System.Drawing.Point(563, 266);
             this.btnInvoicing.Name = "btnInvoicing";
@@ -59,6 +67,9 @@
             // 
             // btnPayments
             // 
+            this.btnPayments.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPayments.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPayments.Location = new System.Drawing.Point(724, 266);
             this.btnPayments.Name = "btnPayments";
@@ -70,6 +81,9 @@
             // 
             // btnSales
             // 
+            this.btnSales.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSales.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSales.Location = new System.Drawing.Point(876, 266);
             this.btnSales.Name = "btnSales";
@@ -81,6 +95,9 @@
             // 
             // btnLogout
             // 
+            this.btnLogout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLogout.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogout.Location = new System.Drawing.Point(38, 579);
             this.btnLogout.Name = "btnLogout";
@@ -89,6 +106,12 @@
             this.btnLogout.Text = "Logout";
             this.btnLogout.UseVisualStyleBackColor = true;
             this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 2;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Homepage
             // 
@@ -100,10 +123,13 @@
             this.Controls.Add(this.btnPayments);
             this.Controls.Add(this.btnInvoicing);
             this.Controls.Add(this.btnStock);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Homepage";
+            this.Opacity = 0D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Homepage";
+            this.Load += new System.EventHandler(this.Homepage_Load);
             this.ResumeLayout(false);
 
         }
@@ -115,5 +141,6 @@
         private System.Windows.Forms.Button btnPayments;
         private System.Windows.Forms.Button btnSales;
         private System.Windows.Forms.Button btnLogout;
+        private System.Windows.Forms.Timer timer1;
     }
 }

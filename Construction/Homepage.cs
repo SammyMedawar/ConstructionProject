@@ -41,7 +41,7 @@ namespace Construction
         private void btnInvoicing_Click(object sender, EventArgs e)
         {
             //create the invoicing page
-            NewInvoices toPage = new NewInvoices();
+            Invoices toPage = new Invoices();
             //show the invoicing page
             toPage.Show();
             //hide the current page
@@ -66,6 +66,18 @@ namespace Construction
             toPage.Show();
             //hide the current page
             this.Hide();
+        }
+
+        private void Homepage_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (Opacity == 1)
+                timer1.Stop();
+            Opacity += .2;
         }
     }
 }

@@ -28,317 +28,494 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Invoices));
-            this.dgvInvoices = new System.Windows.Forms.DataGridView();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.tbID = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tbCompanyName = new System.Windows.Forms.TextBox();
-            this.dtInvoiceDate = new System.Windows.Forms.DateTimePicker();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.button1 = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.tbPrice = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.tbPaid = new System.Windows.Forms.TextBox();
-            this.btnAdd = new System.Windows.Forms.Button();
-            this.btnLogout = new System.Windows.Forms.Button();
-            this.btnHomepage = new System.Windows.Forms.Button();
-            this.btnIDSearch = new System.Windows.Forms.Button();
-            this.Limit = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.dtPickerTo = new System.Windows.Forms.DateTimePicker();
-            this.dtPickerFrom = new System.Windows.Forms.DateTimePicker();
-            this.tbPaymentLimit = new System.Windows.Forms.TextBox();
+            this.tbLimitInvoiceDetails = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.labelidk = new System.Windows.Forms.Label();
+            this.tbLimitInvoice = new System.Windows.Forms.TextBox();
+            this.dgvInvoicesDetails = new System.Windows.Forms.DataGridView();
+            this.dgvInvoices = new System.Windows.Forms.DataGridView();
+            this.PanelOne = new System.Windows.Forms.Panel();
             this.btnSearch = new System.Windows.Forms.Button();
+            this.btnLogout = new System.Windows.Forms.Button();
+            this.tbSearch = new Construction.PlaceholderTextBox();
+            this.btnHomepage = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.btnReload = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.labelTotal = new System.Windows.Forms.Label();
+            this.labelPaid = new System.Windows.Forms.Label();
+            this.labelToPay = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.btnAdd = new System.Windows.Forms.Button();
+            this.radioGroupSearch = new System.Windows.Forms.FlowLayoutPanel();
+            this.radioCompany = new System.Windows.Forms.RadioButton();
+            this.radioID = new System.Windows.Forms.RadioButton();
+            this.radioGroupMoney = new System.Windows.Forms.FlowLayoutPanel();
             this.radioAll = new System.Windows.Forms.RadioButton();
             this.radioPaid = new System.Windows.Forms.RadioButton();
             this.radioNotPaid = new System.Windows.Forms.RadioButton();
-            this.tbSearch = new Construction.PlaceholderTextBox();
-            this.tbM2Amount = new Construction.PlaceholderTextBox();
-            this.tbM3Price = new Construction.PlaceholderTextBox();
-            this.tbM3Weight = new Construction.PlaceholderTextBox();
-            this.tbM2Price = new Construction.PlaceholderTextBox();
-            this.tbM1Price = new Construction.PlaceholderTextBox();
-            this.tbM1Weight = new Construction.PlaceholderTextBox();
+            this.dtPickerFrom = new System.Windows.Forms.DateTimePicker();
+            this.label10 = new System.Windows.Forms.Label();
+            this.dtPickerTo = new System.Windows.Forms.DateTimePicker();
+            this.label11 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvInvoicesDetails)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInvoices)).BeginInit();
+            this.PanelOne.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.radioGroupSearch.SuspendLayout();
+            this.radioGroupMoney.SuspendLayout();
             this.SuspendLayout();
             // 
-            // dgvInvoices
+            // timer1
             // 
-            this.dgvInvoices.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvInvoices.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.dgvInvoices.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvInvoices.Location = new System.Drawing.Point(423, 93);
-            this.dgvInvoices.Name = "dgvInvoices";
-            this.dgvInvoices.RowHeadersVisible = false;
-            this.dgvInvoices.Size = new System.Drawing.Size(829, 428);
-            this.dgvInvoices.TabIndex = 34;
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 2;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // label3
+            // button1
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(158, 9);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(75, 20);
-            this.label3.TabIndex = 35;
-            this.label3.Text = "Invoices";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(11, 50);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(26, 20);
-            this.label2.TabIndex = 37;
-            this.label2.Text = "ID";
-            // 
-            // tbID
-            // 
-            this.tbID.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbID.Location = new System.Drawing.Point(161, 47);
-            this.tbID.Name = "tbID";
-            this.tbID.Size = new System.Drawing.Size(142, 26);
-            this.tbID.TabIndex = 36;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(11, 100);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(122, 20);
-            this.label1.TabIndex = 39;
-            this.label1.Text = "Company Name";
-            // 
-            // tbCompanyName
-            // 
-            this.tbCompanyName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbCompanyName.Location = new System.Drawing.Point(161, 97);
-            this.tbCompanyName.Name = "tbCompanyName";
-            this.tbCompanyName.Size = new System.Drawing.Size(166, 26);
-            this.tbCompanyName.TabIndex = 38;
-            // 
-            // dtInvoiceDate
-            // 
-            this.dtInvoiceDate.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtInvoiceDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtInvoiceDate.Location = new System.Drawing.Point(161, 144);
-            this.dtInvoiceDate.Name = "dtInvoiceDate";
-            this.dtInvoiceDate.Size = new System.Drawing.Size(166, 20);
-            this.dtInvoiceDate.TabIndex = 40;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(11, 145);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(44, 20);
-            this.label4.TabIndex = 41;
-            this.label4.Text = "Date";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(11, 186);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(78, 20);
-            this.label5.TabIndex = 42;
-            this.label5.Text = "Material 1";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(11, 233);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(78, 20);
-            this.label6.TabIndex = 45;
-            this.label6.Text = "Material 2";
+            this.button1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button1.BackgroundImage")));
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button1.Location = new System.Drawing.Point(595, 340);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(27, 27);
+            this.button1.TabIndex = 14;
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(11, 281);
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(806, 342);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(78, 20);
-            this.label7.TabIndex = 48;
-            this.label7.Text = "Material 3";
+            this.label7.Size = new System.Drawing.Size(208, 20);
+            this.label7.TabIndex = 136;
+            this.label7.Text = "Invoices Details Records";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(11, 330);
+            this.label8.Location = new System.Drawing.Point(504, 343);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(44, 20);
-            this.label8.TabIndex = 53;
-            this.label8.Text = "Price";
+            this.label8.Size = new System.Drawing.Size(42, 20);
+            this.label8.TabIndex = 135;
+            this.label8.Text = "Limit";
             // 
-            // tbPrice
+            // tbLimitInvoiceDetails
             // 
-            this.tbPrice.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbPrice.Location = new System.Drawing.Point(161, 327);
-            this.tbPrice.Name = "tbPrice";
-            this.tbPrice.Size = new System.Drawing.Size(166, 26);
-            this.tbPrice.TabIndex = 52;
+            this.tbLimitInvoiceDetails.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbLimitInvoiceDetails.Location = new System.Drawing.Point(552, 340);
+            this.tbLimitInvoiceDetails.Name = "tbLimitInvoiceDetails";
+            this.tbLimitInvoiceDetails.Size = new System.Drawing.Size(37, 26);
+            this.tbLimitInvoiceDetails.TabIndex = 13;
+            this.tbLimitInvoiceDetails.Text = "50";
+            this.tbLimitInvoiceDetails.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbLimitInvoiceDetails_KeyDown);
+            this.tbLimitInvoiceDetails.Leave += new System.EventHandler(this.tbLimitInvoiceDetails_Leave);
             // 
-            // label9
+            // label6
             // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(11, 377);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(40, 20);
-            this.label9.TabIndex = 55;
-            this.label9.Text = "Paid";
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(828, 35);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(147, 20);
+            this.label6.TabIndex = 133;
+            this.label6.Text = "Invoices Records";
             // 
-            // tbPaid
+            // labelidk
             // 
-            this.tbPaid.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbPaid.Location = new System.Drawing.Point(161, 374);
-            this.tbPaid.Name = "tbPaid";
-            this.tbPaid.Size = new System.Drawing.Size(166, 26);
-            this.tbPaid.TabIndex = 54;
+            this.labelidk.AutoSize = true;
+            this.labelidk.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelidk.Location = new System.Drawing.Point(504, 32);
+            this.labelidk.Name = "labelidk";
+            this.labelidk.Size = new System.Drawing.Size(42, 20);
+            this.labelidk.TabIndex = 132;
+            this.labelidk.Text = "Limit";
             // 
-            // btnAdd
+            // tbLimitInvoice
             // 
-            this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAdd.Location = new System.Drawing.Point(15, 424);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(312, 37);
-            this.btnAdd.TabIndex = 56;
-            this.btnAdd.Text = "Update";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            this.tbLimitInvoice.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbLimitInvoice.Location = new System.Drawing.Point(552, 29);
+            this.tbLimitInvoice.Name = "tbLimitInvoice";
+            this.tbLimitInvoice.Size = new System.Drawing.Size(37, 26);
+            this.tbLimitInvoice.TabIndex = 12;
+            this.tbLimitInvoice.Text = "25";
+            this.tbLimitInvoice.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbLimitInvoice_KeyDown);
+            this.tbLimitInvoice.Leave += new System.EventHandler(this.tbLimitInvoice_Leave);
             // 
-            // btnLogout
+            // dgvInvoicesDetails
             // 
-            this.btnLogout.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLogout.Location = new System.Drawing.Point(12, 477);
-            this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(111, 65);
-            this.btnLogout.TabIndex = 58;
-            this.btnLogout.Text = "Logout";
-            this.btnLogout.UseVisualStyleBackColor = true;
-            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
+            this.dgvInvoicesDetails.AllowUserToAddRows = false;
+            this.dgvInvoicesDetails.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
+            this.dgvInvoicesDetails.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvInvoicesDetails.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvInvoicesDetails.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dgvInvoicesDetails.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dgvInvoicesDetails.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.AliceBlue;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(5);
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvInvoicesDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvInvoicesDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.AliceBlue;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.Format = "N2";
+            dataGridViewCellStyle3.NullValue = "32";
+            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(5);
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvInvoicesDetails.DefaultCellStyle = dataGridViewCellStyle3;
+            this.dgvInvoicesDetails.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgvInvoicesDetails.Location = new System.Drawing.Point(477, 369);
+            this.dgvInvoicesDetails.Name = "dgvInvoicesDetails";
+            this.dgvInvoicesDetails.ReadOnly = true;
+            this.dgvInvoicesDetails.RowHeadersVisible = false;
+            this.dgvInvoicesDetails.Size = new System.Drawing.Size(782, 275);
+            this.dgvInvoicesDetails.TabIndex = 16;
+            this.dgvInvoicesDetails.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgvInvoicesDetails_DataBindingComplete);
             // 
-            // btnHomepage
+            // dgvInvoices
             // 
-            this.btnHomepage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnHomepage.Location = new System.Drawing.Point(133, 477);
-            this.btnHomepage.Name = "btnHomepage";
-            this.btnHomepage.Size = new System.Drawing.Size(128, 65);
-            this.btnHomepage.TabIndex = 57;
-            this.btnHomepage.Text = "Homepage";
-            this.btnHomepage.UseVisualStyleBackColor = true;
-            this.btnHomepage.Click += new System.EventHandler(this.btnHomepage_Click);
+            this.dgvInvoices.AllowUserToAddRows = false;
+            this.dgvInvoices.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.White;
+            this.dgvInvoices.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            this.dgvInvoices.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvInvoices.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dgvInvoices.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dgvInvoices.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.AliceBlue;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(5);
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvInvoices.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            this.dgvInvoices.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.AliceBlue;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.Padding = new System.Windows.Forms.Padding(5);
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvInvoices.DefaultCellStyle = dataGridViewCellStyle6;
+            this.dgvInvoices.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgvInvoices.Location = new System.Drawing.Point(477, 61);
+            this.dgvInvoices.Name = "dgvInvoices";
+            this.dgvInvoices.ReadOnly = true;
+            this.dgvInvoices.RowHeadersVisible = false;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvInvoices.RowsDefaultCellStyle = dataGridViewCellStyle7;
+            this.dgvInvoices.Size = new System.Drawing.Size(782, 273);
+            this.dgvInvoices.TabIndex = 15;
+            this.dgvInvoices.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvInvoices_CellDoubleClick);
+            this.dgvInvoices.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dgvInvoices_DataBindingComplete);
             // 
-            // btnIDSearch
+            // PanelOne
             // 
-            this.btnIDSearch.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnIDSearch.BackgroundImage")));
-            this.btnIDSearch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnIDSearch.Location = new System.Drawing.Point(300, 46);
-            this.btnIDSearch.Name = "btnIDSearch";
-            this.btnIDSearch.Size = new System.Drawing.Size(27, 27);
-            this.btnIDSearch.TabIndex = 59;
-            this.btnIDSearch.UseVisualStyleBackColor = true;
-            this.btnIDSearch.Click += new System.EventHandler(this.btnIDSearch_Click);
-            // 
-            // Limit
-            // 
-            this.Limit.AutoSize = true;
-            this.Limit.Location = new System.Drawing.Point(420, 71);
-            this.Limit.Name = "Limit";
-            this.Limit.Size = new System.Drawing.Size(28, 13);
-            this.Limit.TabIndex = 64;
-            this.Limit.Text = "Limit";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(740, 71);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(20, 13);
-            this.label10.TabIndex = 63;
-            this.label10.Text = "To";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(498, 71);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(30, 13);
-            this.label11.TabIndex = 62;
-            this.label11.Text = "From";
-            // 
-            // dtPickerTo
-            // 
-            this.dtPickerTo.Location = new System.Drawing.Point(764, 67);
-            this.dtPickerTo.Name = "dtPickerTo";
-            this.dtPickerTo.Size = new System.Drawing.Size(200, 20);
-            this.dtPickerTo.TabIndex = 61;
-            this.dtPickerTo.CloseUp += new System.EventHandler(this.dtPickerTo_CloseUp);
-            // 
-            // dtPickerFrom
-            // 
-            this.dtPickerFrom.Location = new System.Drawing.Point(534, 67);
-            this.dtPickerFrom.Name = "dtPickerFrom";
-            this.dtPickerFrom.Size = new System.Drawing.Size(200, 20);
-            this.dtPickerFrom.TabIndex = 60;
-            this.dtPickerFrom.Value = new System.DateTime(2023, 5, 1, 0, 0, 0, 0);
-            this.dtPickerFrom.CloseUp += new System.EventHandler(this.dtPickerFrom_CloseUp);
-            // 
-            // tbPaymentLimit
-            // 
-            this.tbPaymentLimit.Location = new System.Drawing.Point(454, 67);
-            this.tbPaymentLimit.Name = "tbPaymentLimit";
-            this.tbPaymentLimit.Size = new System.Drawing.Size(29, 20);
-            this.tbPaymentLimit.TabIndex = 65;
-            this.tbPaymentLimit.Text = "25";
-            this.tbPaymentLimit.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbPaymentLimit_KeyDown_1);
-            this.tbPaymentLimit.Leave += new System.EventHandler(this.tbPaymentLimit_Leave);
+            this.PanelOne.Controls.Add(this.btnSearch);
+            this.PanelOne.Controls.Add(this.btnLogout);
+            this.PanelOne.Controls.Add(this.tbSearch);
+            this.PanelOne.Controls.Add(this.btnHomepage);
+            this.PanelOne.Controls.Add(this.label1);
+            this.PanelOne.Controls.Add(this.btnReload);
+            this.PanelOne.Controls.Add(this.panel1);
+            this.PanelOne.Controls.Add(this.label3);
+            this.PanelOne.Controls.Add(this.btnAdd);
+            this.PanelOne.Controls.Add(this.radioGroupSearch);
+            this.PanelOne.Controls.Add(this.radioGroupMoney);
+            this.PanelOne.Controls.Add(this.dtPickerFrom);
+            this.PanelOne.Controls.Add(this.label10);
+            this.PanelOne.Controls.Add(this.dtPickerTo);
+            this.PanelOne.Controls.Add(this.label11);
+            this.PanelOne.Location = new System.Drawing.Point(2, 1);
+            this.PanelOne.Name = "PanelOne";
+            this.PanelOne.Size = new System.Drawing.Size(473, 667);
+            this.PanelOne.TabIndex = 0;
             // 
             // btnSearch
             // 
             this.btnSearch.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSearch.BackgroundImage")));
             this.btnSearch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnSearch.Location = new System.Drawing.Point(649, 25);
+            this.btnSearch.Location = new System.Drawing.Point(323, 68);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(27, 27);
-            this.btnSearch.TabIndex = 67;
+            this.btnSearch.TabIndex = 2;
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
+            // btnLogout
+            // 
+            this.btnLogout.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLogout.Location = new System.Drawing.Point(36, 578);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(111, 65);
+            this.btnLogout.TabIndex = 18;
+            this.btnLogout.Text = "Logout";
+            this.btnLogout.UseVisualStyleBackColor = true;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
+            // 
+            // tbSearch
+            // 
+            this.tbSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.tbSearch.ForeColor = System.Drawing.Color.Gray;
+            this.tbSearch.Location = new System.Drawing.Point(70, 69);
+            this.tbSearch.Name = "tbSearch";
+            this.tbSearch.PlaceHolderText = "Search...";
+            this.tbSearch.Size = new System.Drawing.Size(261, 26);
+            this.tbSearch.TabIndex = 0;
+            this.tbSearch.Text = "Search...";
+            // 
+            // btnHomepage
+            // 
+            this.btnHomepage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnHomepage.Location = new System.Drawing.Point(157, 578);
+            this.btnHomepage.Name = "btnHomepage";
+            this.btnHomepage.Size = new System.Drawing.Size(128, 65);
+            this.btnHomepage.TabIndex = 17;
+            this.btnHomepage.Text = "Homepage";
+            this.btnHomepage.UseVisualStyleBackColor = true;
+            this.btnHomepage.Click += new System.EventHandler(this.btnHomepage_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(181, 391);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(87, 20);
+            this.label1.TabIndex = 125;
+            this.label1.Text = "Payments";
             // 
             // btnReload
             // 
             this.btnReload.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnReload.BackgroundImage")));
             this.btnReload.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnReload.Location = new System.Drawing.Point(675, 25);
+            this.btnReload.Location = new System.Drawing.Point(349, 68);
             this.btnReload.Name = "btnReload";
             this.btnReload.Size = new System.Drawing.Size(27, 27);
-            this.btnReload.TabIndex = 68;
+            this.btnReload.TabIndex = 3;
             this.btnReload.UseVisualStyleBackColor = true;
             this.btnReload.Click += new System.EventHandler(this.btnReload_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.label13);
+            this.panel1.Controls.Add(this.label12);
+            this.panel1.Controls.Add(this.label9);
+            this.panel1.Controls.Add(this.labelTotal);
+            this.panel1.Controls.Add(this.labelPaid);
+            this.panel1.Controls.Add(this.labelToPay);
+            this.panel1.Controls.Add(this.label5);
+            this.panel1.Controls.Add(this.label4);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Location = new System.Drawing.Point(36, 402);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(396, 113);
+            this.panel1.TabIndex = 124;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(143, 79);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(60, 20);
+            this.label13.TabIndex = 89;
+            this.label13.Text = "F.CFA";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(143, 48);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(60, 20);
+            this.label12.TabIndex = 89;
+            this.label12.Text = "F.CFA";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(143, 17);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(60, 20);
+            this.label9.TabIndex = 88;
+            this.label9.Text = "F.CFA";
+            // 
+            // labelTotal
+            // 
+            this.labelTotal.AutoSize = true;
+            this.labelTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTotal.Location = new System.Drawing.Point(199, 80);
+            this.labelTotal.Name = "labelTotal";
+            this.labelTotal.Size = new System.Drawing.Size(49, 20);
+            this.labelTotal.TabIndex = 82;
+            this.labelTotal.Text = "1000";
+            // 
+            // labelPaid
+            // 
+            this.labelPaid.AutoSize = true;
+            this.labelPaid.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPaid.Location = new System.Drawing.Point(199, 50);
+            this.labelPaid.Name = "labelPaid";
+            this.labelPaid.Size = new System.Drawing.Size(49, 20);
+            this.labelPaid.TabIndex = 82;
+            this.labelPaid.Text = "1000";
+            // 
+            // labelToPay
+            // 
+            this.labelToPay.AutoSize = true;
+            this.labelToPay.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelToPay.Location = new System.Drawing.Point(199, 17);
+            this.labelToPay.Name = "labelToPay";
+            this.labelToPay.Size = new System.Drawing.Size(49, 20);
+            this.labelToPay.TabIndex = 81;
+            this.labelToPay.Text = "1000";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(7, 80);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(49, 20);
+            this.label5.TabIndex = 80;
+            this.label5.Text = "Total";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(7, 50);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(89, 20);
+            this.label4.TabIndex = 80;
+            this.label4.Text = "Total Paid";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(7, 17);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(108, 20);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Total To Pay";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(183, 19);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(75, 20);
+            this.label3.TabIndex = 116;
+            this.label3.Text = "Invoices";
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAdd.Location = new System.Drawing.Point(77, 313);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(299, 46);
+            this.btnAdd.TabIndex = 11;
+            this.btnAdd.Text = "Update or Add an Invoice";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
+            // radioGroupSearch
+            // 
+            this.radioGroupSearch.Controls.Add(this.radioCompany);
+            this.radioGroupSearch.Controls.Add(this.radioID);
+            this.radioGroupSearch.Location = new System.Drawing.Point(70, 101);
+            this.radioGroupSearch.Name = "radioGroupSearch";
+            this.radioGroupSearch.Size = new System.Drawing.Size(306, 32);
+            this.radioGroupSearch.TabIndex = 4;
+            this.radioGroupSearch.TabStop = true;
+            // 
+            // radioCompany
+            // 
+            this.radioCompany.AutoSize = true;
+            this.radioCompany.Checked = true;
+            this.radioCompany.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioCompany.Location = new System.Drawing.Point(3, 3);
+            this.radioCompany.Name = "radioCompany";
+            this.radioCompany.Size = new System.Drawing.Size(162, 24);
+            this.radioCompany.TabIndex = 4;
+            this.radioCompany.TabStop = true;
+            this.radioCompany.Text = "By Company Name";
+            this.radioCompany.UseVisualStyleBackColor = true;
+            this.radioCompany.Click += new System.EventHandler(this.radioCompany_Click);
+            // 
+            // radioID
+            // 
+            this.radioID.AutoSize = true;
+            this.radioID.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioID.Location = new System.Drawing.Point(171, 3);
+            this.radioID.Name = "radioID";
+            this.radioID.Size = new System.Drawing.Size(66, 24);
+            this.radioID.TabIndex = 5;
+            this.radioID.TabStop = true;
+            this.radioID.Text = "By ID";
+            this.radioID.UseVisualStyleBackColor = true;
+            this.radioID.Click += new System.EventHandler(this.radioID_Click);
+            // 
+            // radioGroupMoney
+            // 
+            this.radioGroupMoney.Controls.Add(this.radioAll);
+            this.radioGroupMoney.Controls.Add(this.radioPaid);
+            this.radioGroupMoney.Controls.Add(this.radioNotPaid);
+            this.radioGroupMoney.Location = new System.Drawing.Point(74, 247);
+            this.radioGroupMoney.Name = "radioGroupMoney";
+            this.radioGroupMoney.Size = new System.Drawing.Size(302, 39);
+            this.radioGroupMoney.TabIndex = 8;
             // 
             // radioAll
             // 
             this.radioAll.AutoSize = true;
             this.radioAll.Checked = true;
-            this.radioAll.Location = new System.Drawing.Point(979, 69);
+            this.radioAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioAll.Location = new System.Drawing.Point(3, 3);
             this.radioAll.Name = "radioAll";
-            this.radioAll.Size = new System.Drawing.Size(36, 17);
-            this.radioAll.TabIndex = 69;
+            this.radioAll.Size = new System.Drawing.Size(44, 24);
+            this.radioAll.TabIndex = 8;
             this.radioAll.TabStop = true;
             this.radioAll.Text = "All";
             this.radioAll.UseVisualStyleBackColor = true;
@@ -347,10 +524,12 @@
             // radioPaid
             // 
             this.radioPaid.AutoSize = true;
-            this.radioPaid.Location = new System.Drawing.Point(1021, 69);
+            this.radioPaid.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioPaid.Location = new System.Drawing.Point(53, 3);
             this.radioPaid.Name = "radioPaid";
-            this.radioPaid.Size = new System.Drawing.Size(46, 17);
-            this.radioPaid.TabIndex = 70;
+            this.radioPaid.Size = new System.Drawing.Size(58, 24);
+            this.radioPaid.TabIndex = 9;
+            this.radioPaid.TabStop = true;
             this.radioPaid.Text = "Paid";
             this.radioPaid.UseVisualStyleBackColor = true;
             this.radioPaid.Click += new System.EventHandler(this.radioPaid_Click);
@@ -358,138 +537,90 @@
             // radioNotPaid
             // 
             this.radioNotPaid.AutoSize = true;
-            this.radioNotPaid.Location = new System.Drawing.Point(1073, 70);
+            this.radioNotPaid.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioNotPaid.Location = new System.Drawing.Point(117, 3);
             this.radioNotPaid.Name = "radioNotPaid";
-            this.radioNotPaid.Size = new System.Drawing.Size(66, 17);
-            this.radioNotPaid.TabIndex = 71;
+            this.radioNotPaid.Size = new System.Drawing.Size(87, 24);
+            this.radioNotPaid.TabIndex = 10;
+            this.radioNotPaid.TabStop = true;
             this.radioNotPaid.Text = "Not Paid";
             this.radioNotPaid.UseVisualStyleBackColor = true;
             this.radioNotPaid.Click += new System.EventHandler(this.radioNotPaid_Click);
             // 
-            // tbSearch
+            // dtPickerFrom
             // 
-            this.tbSearch.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.tbSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.tbSearch.ForeColor = System.Drawing.Color.Gray;
-            this.tbSearch.Location = new System.Drawing.Point(423, 25);
-            this.tbSearch.Name = "tbSearch";
-            this.tbSearch.PlaceHolderText = "Search Company...";
-            this.tbSearch.Size = new System.Drawing.Size(227, 26);
-            this.tbSearch.TabIndex = 66;
-            this.tbSearch.Text = "Search Company...";
+            this.dtPickerFrom.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtPickerFrom.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtPickerFrom.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtPickerFrom.Location = new System.Drawing.Point(144, 154);
+            this.dtPickerFrom.Name = "dtPickerFrom";
+            this.dtPickerFrom.Size = new System.Drawing.Size(232, 26);
+            this.dtPickerFrom.TabIndex = 6;
+            this.dtPickerFrom.Value = new System.DateTime(2023, 5, 1, 0, 0, 0, 0);
+            this.dtPickerFrom.CloseUp += new System.EventHandler(this.dtPickerFrom_CloseUp);
             // 
-            // tbM2Amount
+            // label10
             // 
-            this.tbM2Amount.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.tbM2Amount.ForeColor = System.Drawing.Color.Gray;
-            this.tbM2Amount.Location = new System.Drawing.Point(161, 233);
-            this.tbM2Amount.Name = "tbM2Amount";
-            this.tbM2Amount.PlaceHolderText = "Weight";
-            this.tbM2Amount.Size = new System.Drawing.Size(80, 26);
-            this.tbM2Amount.TabIndex = 51;
-            this.tbM2Amount.Text = "Weight";
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(70, 202);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(27, 20);
+            this.label10.TabIndex = 121;
+            this.label10.Text = "To";
             // 
-            // tbM3Price
+            // dtPickerTo
             // 
-            this.tbM3Price.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.tbM3Price.ForeColor = System.Drawing.Color.Gray;
-            this.tbM3Price.Location = new System.Drawing.Point(247, 281);
-            this.tbM3Price.Name = "tbM3Price";
-            this.tbM3Price.PlaceHolderText = "Price";
-            this.tbM3Price.Size = new System.Drawing.Size(80, 26);
-            this.tbM3Price.TabIndex = 50;
-            this.tbM3Price.Text = "Price";
+            this.dtPickerTo.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtPickerTo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dtPickerTo.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtPickerTo.Location = new System.Drawing.Point(144, 197);
+            this.dtPickerTo.Name = "dtPickerTo";
+            this.dtPickerTo.Size = new System.Drawing.Size(232, 26);
+            this.dtPickerTo.TabIndex = 7;
+            this.dtPickerTo.CloseUp += new System.EventHandler(this.dtPickerTo_CloseUp);
             // 
-            // tbM3Weight
+            // label11
             // 
-            this.tbM3Weight.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.tbM3Weight.ForeColor = System.Drawing.Color.Gray;
-            this.tbM3Weight.Location = new System.Drawing.Point(161, 281);
-            this.tbM3Weight.Name = "tbM3Weight";
-            this.tbM3Weight.PlaceHolderText = "Weight";
-            this.tbM3Weight.Size = new System.Drawing.Size(80, 26);
-            this.tbM3Weight.TabIndex = 49;
-            this.tbM3Weight.Text = "Weight";
-            // 
-            // tbM2Price
-            // 
-            this.tbM2Price.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.tbM2Price.ForeColor = System.Drawing.Color.Gray;
-            this.tbM2Price.Location = new System.Drawing.Point(247, 233);
-            this.tbM2Price.Name = "tbM2Price";
-            this.tbM2Price.PlaceHolderText = "Price";
-            this.tbM2Price.Size = new System.Drawing.Size(80, 26);
-            this.tbM2Price.TabIndex = 47;
-            this.tbM2Price.Text = "Price";
-            // 
-            // tbM1Price
-            // 
-            this.tbM1Price.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.tbM1Price.ForeColor = System.Drawing.Color.Gray;
-            this.tbM1Price.Location = new System.Drawing.Point(247, 186);
-            this.tbM1Price.Name = "tbM1Price";
-            this.tbM1Price.PlaceHolderText = "Price";
-            this.tbM1Price.Size = new System.Drawing.Size(80, 26);
-            this.tbM1Price.TabIndex = 44;
-            this.tbM1Price.Text = "Price";
-            // 
-            // tbM1Weight
-            // 
-            this.tbM1Weight.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.tbM1Weight.ForeColor = System.Drawing.Color.Gray;
-            this.tbM1Weight.Location = new System.Drawing.Point(161, 186);
-            this.tbM1Weight.Name = "tbM1Weight";
-            this.tbM1Weight.PlaceHolderText = "Weight";
-            this.tbM1Weight.Size = new System.Drawing.Size(80, 26);
-            this.tbM1Weight.TabIndex = 43;
-            this.tbM1Weight.Text = "Weight";
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(70, 155);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(46, 20);
+            this.label11.TabIndex = 120;
+            this.label11.Text = "From";
             // 
             // Invoices
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1294, 554);
-            this.Controls.Add(this.radioNotPaid);
-            this.Controls.Add(this.radioPaid);
-            this.Controls.Add(this.radioAll);
-            this.Controls.Add(this.btnReload);
-            this.Controls.Add(this.btnSearch);
-            this.Controls.Add(this.tbSearch);
-            this.Controls.Add(this.tbPaymentLimit);
-            this.Controls.Add(this.Limit);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.label11);
-            this.Controls.Add(this.dtPickerTo);
-            this.Controls.Add(this.dtPickerFrom);
-            this.Controls.Add(this.btnIDSearch);
-            this.Controls.Add(this.btnLogout);
-            this.Controls.Add(this.btnHomepage);
-            this.Controls.Add(this.btnAdd);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.tbPaid);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.tbPrice);
-            this.Controls.Add(this.tbM2Amount);
-            this.Controls.Add(this.tbM3Price);
-            this.Controls.Add(this.tbM3Weight);
+            this.ClientSize = new System.Drawing.Size(1294, 668);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.tbM2Price);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.tbLimitInvoiceDetails);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.tbM1Price);
-            this.Controls.Add(this.tbM1Weight);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.dtInvoiceDate);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.tbCompanyName);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.tbID);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.labelidk);
+            this.Controls.Add(this.tbLimitInvoice);
+            this.Controls.Add(this.dgvInvoicesDetails);
             this.Controls.Add(this.dgvInvoices);
+            this.Controls.Add(this.PanelOne);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Invoices";
+            this.Opacity = 0D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Invoices";
+            this.Load += new System.EventHandler(this.Invoices_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvInvoicesDetails)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvInvoices)).EndInit();
+            this.PanelOne.ResumeLayout(false);
+            this.PanelOne.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.radioGroupSearch.ResumeLayout(false);
+            this.radioGroupSearch.PerformLayout();
+            this.radioGroupMoney.ResumeLayout(false);
+            this.radioGroupMoney.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -497,42 +628,45 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dgvInvoices;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox tbID;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox tbCompanyName;
-        private System.Windows.Forms.DateTimePicker dtInvoiceDate;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private PlaceholderTextBox tbM1Weight;
-        private PlaceholderTextBox tbM1Price;
-        private PlaceholderTextBox tbM2Price;
-        private System.Windows.Forms.Label label6;
-        private PlaceholderTextBox tbM3Price;
-        private PlaceholderTextBox tbM3Weight;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label7;
-        private PlaceholderTextBox tbM2Amount;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox tbPrice;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox tbPaid;
-        private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.Button btnLogout;
-        private System.Windows.Forms.Button btnHomepage;
-        private System.Windows.Forms.Button btnIDSearch;
-        private System.Windows.Forms.Label Limit;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.DateTimePicker dtPickerTo;
-        private System.Windows.Forms.DateTimePicker dtPickerFrom;
-        private System.Windows.Forms.TextBox tbPaymentLimit;
-        private PlaceholderTextBox tbSearch;
+        private System.Windows.Forms.TextBox tbLimitInvoiceDetails;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label labelidk;
+        private System.Windows.Forms.TextBox tbLimitInvoice;
+        private System.Windows.Forms.DataGridView dgvInvoicesDetails;
+        private System.Windows.Forms.DataGridView dgvInvoices;
+        private System.Windows.Forms.Panel PanelOne;
         private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.Button btnLogout;
+        private PlaceholderTextBox tbSearch;
+        private System.Windows.Forms.Button btnHomepage;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnReload;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label labelTotal;
+        private System.Windows.Forms.Label labelPaid;
+        private System.Windows.Forms.Label labelToPay;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.FlowLayoutPanel radioGroupSearch;
+        private System.Windows.Forms.RadioButton radioCompany;
+        private System.Windows.Forms.RadioButton radioID;
+        private System.Windows.Forms.FlowLayoutPanel radioGroupMoney;
         private System.Windows.Forms.RadioButton radioAll;
         private System.Windows.Forms.RadioButton radioPaid;
         private System.Windows.Forms.RadioButton radioNotPaid;
+        private System.Windows.Forms.DateTimePicker dtPickerFrom;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.DateTimePicker dtPickerTo;
+        private System.Windows.Forms.Label label11;
     }
 }

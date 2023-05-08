@@ -49,6 +49,11 @@ namespace Construction
 
         private void loadData()
         {
+            if (con.State == ConnectionState.Open)
+            {
+                con.Close();
+            }
+
             //check if connection is closed, if so open it
             if (con.State != ConnectionState.Open)
             {
@@ -206,6 +211,11 @@ namespace Construction
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            if (con.State == ConnectionState.Open)
+            {
+                con.Close();
+            }
+
             if (con.State != ConnectionState.Open)
             {
                 con.Open();
@@ -343,6 +353,11 @@ namespace Construction
 
         private void reload()
         {
+            if (con.State == ConnectionState.Open)
+            {
+                con.Close();
+            }
+
             tbLimitInvoice.Text = "25";
             tbLimitInvoiceDetails.Text = "50";
             tbSearch.setPlaceholder();
@@ -361,6 +376,10 @@ namespace Construction
         }
         private void btnReload_Click(object sender, EventArgs e)
         {
+            if(con.State == ConnectionState.Open)
+            {
+                con.Close();
+            }
             reload();
         }
 
@@ -440,7 +459,7 @@ namespace Construction
             }
             else
             {
-                fromDate = new DateTime(fromDateOr.Year, fromDateOr.Month, fromDateOr.Day, 23, 59, 0);
+                fromDate = new DateTime(fromDateOr.Year, fromDateOr.Month, fromDateOr.Day, 00, 00, 00);
             }
 
             toDate = new DateTime(toDateOr.Year, toDateOr.Month, toDateOr.Day, 23, 59, 0);
@@ -502,7 +521,11 @@ namespace Construction
 
         private void button1_Click(object sender, EventArgs e)
         {
-            reload();
+            if (con.State == ConnectionState.Open)
+            {
+                con.Close();
+            }
+            loadData();
         }
 
         private void NewInvoices_Load(object sender, EventArgs e)

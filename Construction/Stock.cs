@@ -42,6 +42,21 @@ namespace Construction
             try
             {
                 if (String.IsNullOrEmpty(tbStockLimit.Text.ToString()))
+                {
+                    MessageBox.Show("Please make sure the limit box has numbers in it");
+                    tbStockLimit.Text = "25";
+                    return;
+                }
+
+                if (!Int32.TryParse(tbStockLimit.Text, out int j))
+                {
+                    MessageBox.Show("Please make sure the limit box has numbers in it");
+                    tbStockLimit.Text = "25";
+                    return;
+
+                }
+
+                if (String.IsNullOrEmpty(tbStockLimit.Text.ToString()))
                     return;
                 int limit = Int32.Parse(tbStockLimit.Text.ToString());
                 string query = "SELECT Name, Weight_Quantity FROM Materials";
@@ -96,11 +111,13 @@ namespace Construction
         }
         private void btnStockUpdate_Click(object sender, EventArgs e)
         {
+
             updateStocks();
         }
 
         private void updateStocks()
         {
+            int count = 0;
             DateTime currentDateTime = DateTime.Now;
             String editedText = "You have successfully updated the following stocks \n";
             double materialWeight;
@@ -109,16 +126,18 @@ namespace Construction
 
             if (!String.IsNullOrEmpty(tbGrav1.Text.ToString()))
             {
-                if(radioSubtract.Checked)
+                if (radioSubtract.Checked)
                     editedText = editedText + "Gravier 0/1: -" + tbGrav1.Text.ToString() + "\n";
                 else
-                editedText = editedText + "Gravier 0/1: " + tbGrav1.Text.ToString() + "\n";
+                    editedText = editedText + "Gravier 0/1: " + tbGrav1.Text.ToString() + "\n";
                 materialWeight = Double.Parse(tbGrav1.Text.ToString());
                 materialID = 1;
                 materialDescription = "Gravier 0/1";
                 updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
                 tbGrav1.Text = "";
             }
+            else
+                count++;
 
             if (!String.IsNullOrEmpty(tbGrav4.Text.ToString()))
             {
@@ -132,6 +151,8 @@ namespace Construction
                 updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
                 tbGrav4.Text = "";
             }
+            else
+                count++;
 
             if (!String.IsNullOrEmpty(tbGrav5.Text.ToString()))
             {
@@ -145,6 +166,8 @@ namespace Construction
                 updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
                 tbGrav5.Text = "";
             }
+            else
+                count++;
 
             if (!String.IsNullOrEmpty(tbGrav15.Text.ToString()))
             {
@@ -158,6 +181,8 @@ namespace Construction
                 updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
                 tbGrav15.Text = "";
             }
+            else
+                count++;
             if (!String.IsNullOrEmpty(tbSable.Text.ToString()))
             {
                 if (radioSubtract.Checked)
@@ -170,6 +195,8 @@ namespace Construction
                 updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
                 tbSable.Text = "";
             }
+            else
+                count++;
             if (!String.IsNullOrEmpty(tbCement.Text.ToString()))
             {
                 if (radioSubtract.Checked)
@@ -182,6 +209,8 @@ namespace Construction
                 updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
                 tbCement.Text = "";
             }
+            else
+                count++;
 
             //Out Materials
             if (!String.IsNullOrEmpty(tbC10.Text.ToString()))
@@ -196,6 +225,8 @@ namespace Construction
                 updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
                 tbC10.Text = "";
             }
+            else
+                count++;
             if (!String.IsNullOrEmpty(tbC15.Text.ToString()))
             {
                 if (radioSubtract.Checked)
@@ -208,6 +239,8 @@ namespace Construction
                 updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
                 tbC15.Text = "";
             }
+            else
+                count++;
             if (!String.IsNullOrEmpty(tbC20.Text.ToString()))
             {
                 if (radioSubtract.Checked)
@@ -220,6 +253,8 @@ namespace Construction
                 updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
                 tbC20.Text = "";
             }
+            else
+                count++;
             if (!String.IsNullOrEmpty(tbP10.Text.ToString()))
             {
                 if (radioSubtract.Checked)
@@ -232,6 +267,8 @@ namespace Construction
                 updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
                 tbP10.Text = "";
             }
+            else
+                count++;
             if (!String.IsNullOrEmpty(tbP15.Text.ToString()))
             {
                 if (radioSubtract.Checked)
@@ -244,6 +281,8 @@ namespace Construction
                 updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
                 tbP15.Text = "";
             }
+            else
+                count++;
             if (!String.IsNullOrEmpty(tbP20.Text.ToString()))
             {
                 if (radioSubtract.Checked)
@@ -255,6 +294,14 @@ namespace Construction
                 materialDescription = "Brique 20cm Pleinne";
                 updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
                 tbP20.Text = "";
+            }
+            else
+                count++;
+
+            if(count >= 12)
+            {
+                MessageBox.Show("Please fill in at least one of the boxes!");
+                return;
             }
 
             MessageBox.Show(editedText);
@@ -359,6 +406,13 @@ namespace Construction
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
             this.dgvMaterials.DefaultCellStyle.Font = new Font("Microsoft Sans Serif", 12);
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (Opacity == 1)
+                timer1.Stop();
+            Opacity += .2;
         }
     }
 }

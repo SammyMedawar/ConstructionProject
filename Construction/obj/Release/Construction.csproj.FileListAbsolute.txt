@@ -3,7 +3,6 @@ C:\Users\medaw\source\repos\Construction\Construction\bin\Release\constructionDa
 C:\Users\medaw\source\repos\Construction\Construction\bin\Release\Construction.exe.config
 C:\Users\medaw\source\repos\Construction\Construction\bin\Release\Construction.exe
 C:\Users\medaw\source\repos\Construction\Construction\bin\Release\Construction.pdb
-C:\Users\medaw\source\repos\Construction\Construction\bin\Release\System.Data.SQLite.dll
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.csproj.AssemblyReference.cache
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.csproj.SuggestedBindingRedirects.cache
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Homepage.resources
@@ -19,3 +18,13 @@ C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.c
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.csproj.CopyComplete
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.exe
 C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.pdb
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.Invoices.resources
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.ucInvoiceAdd.resources
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.ucSalesAdd.resources
+C:\Users\medaw\source\repos\Construction\Construction\bin\Release\Microsoft.AnalysisServices.AppLocal.dll
+C:\Users\medaw\source\repos\Construction\Construction\bin\Release\Microsoft.AnalysisServices.AppLocal.Tabular.dll
+C:\Users\medaw\source\repos\Construction\Construction\bin\Release\Microsoft.ReportViewer.Common.dll
+C:\Users\medaw\source\repos\Construction\Construction\bin\Release\Microsoft.ReportViewer.ProcessingObjectModel.DLL
+C:\Users\medaw\source\repos\Construction\Construction\bin\Release\Microsoft.ReportViewer.WebForms.DLL
+C:\Users\medaw\source\repos\Construction\Construction\bin\Release\Microsoft.AnalysisServices.AppLocal.Core.dll
+C:\Users\medaw\source\repos\Construction\Construction\obj\Release\Construction.frmPrint.resources

@@ -4,13 +4,11 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
-using System.CodeDom;
 
 namespace Construction
 {
@@ -22,7 +20,36 @@ namespace Construction
         public Invoices()
         {
             InitializeComponent();
+            DateTime newFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 01, 00, 00, 00);
+            dtPickerFrom.Value = newFrom;
+            dtPickerTo.Value = DateTime.Now;
             loadData();
+        }
+
+        private void Invoices_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (Opacity == 1)
+                timer1.Stop();
+            Opacity += 0.2;
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            PanelOne.SendToBack();
+            Panel panelTwo = new Panel();
+            panelTwo.Size = new Size(473, 667);
+            panelTwo.Location = new Point(2, 1);
+            panelTwo.Controls.Add(ucInvoiceAdd.Instance);
+            this.Controls.Add(panelTwo);
+            ucInvoiceAdd.Instance.Dock = DockStyle.Fill;
+            ucInvoiceAdd.Instance.BringToFront();
+            panelTwo.BringToFront();
+            panelTwo.Focus();
         }
 
         private void btnHomepage_Click(object sender, EventArgs e)
@@ -45,8 +72,13 @@ namespace Construction
             this.Hide();
         }
 
-        private void loadData()
+        public void loadData()
         {
+            if (con.State == ConnectionState.Open)
+            {
+                con.Close();
+            }
+
             //check if connection is closed, if so open it
             if (con.State != ConnectionState.Open)
             {
@@ -55,27 +87,144 @@ namespace Construction
 
             try
             {
+                //Intitiaize the variables to be used
+                String limitInvoice = tbLimitInvoice.Text.ToString();
+                String limitInvoiceDetails = tbLimitInvoiceDetails.Text.ToString();
                 String searchString = tbSearch.Text.ToString();
-                if (String.IsNullOrEmpty(tbPaymentLimit.Text.ToString()))
-                    return;
-                int limit = Int32.Parse(tbPaymentLimit.Text.ToString());
-                string query = "SELECT TOP " + limit + " * FROM Invoices WHERE Date BETWEEN '" + dtPickerFrom.Value + "' AND '" + dtPickerTo.Value + "' ";// ORDER BY Date DESC;";
-                if (!String.IsNullOrEmpty(searchString))
-                    query = query + "AND CompanyName like '"+searchString+"' ";
-                if (radioPaid.Checked)
-                    query = query + "AND ToPay = 0 ";
-                if (radioNotPaid.Checked)
-                    query = query + "AND Paid != Total ";
-                query = query + "ORDER BY Date DESC;";
-                SqlDataAdapter adapter = new SqlDataAdapter(query, con);
-                DataTable dt = new DataTable();
-                adapter.Fill(dt);
-                dgvInvoices.DataSource = dt;
 
-                //formatting of the datagridview
-                DataGridViewColumn x = dgvInvoices.Columns[0];
-                x.FillWeight = 70;
-                dgvInvoices.Columns[1].FillWeight = 190;
+
+                DateTime fromDateOr = dtPickerFrom.Value;
+                DateTime toDateOr = dtPickerTo.Value;
+                DateTime fromDate, toDate;
+
+                //If the user makes it so that toDate = fromDate, make sure toDate starts at 12am
+                if (fromDateOr == toDateOr)
+                {
+                    fromDate = new DateTime(fromDateOr.Year, fromDateOr.Month, fromDateOr.Day, 00, 00, 00);
+                }
+                else
+                {
+                    fromDate = new DateTime(fromDateOr.Year, fromDateOr.Month, fromDateOr.Day, 00, 00, 00);
+                }
+
+                toDate = new DateTime(toDateOr.Year, toDateOr.Month, toDateOr.Day, 23, 59, 0);
+
+                if (toDate < fromDate)
+                {
+                    MessageBox.Show("Please make sure the To Date is higher than the From Date");
+                    DateTime newFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 01, 00, 00, 00);
+                    dtPickerFrom.Value = newFrom;
+                    dtPickerTo.Value = DateTime.Now;
+                    return;
+                }
+                int limitInvoiceInt, limitInvoiceDetailsInt;
+
+                //End of Initialization of variables
+
+
+                //Check if limit boxes are filled, if not return
+                if (String.IsNullOrEmpty(limitInvoice) || String.IsNullOrEmpty(limitInvoiceDetails))
+                {
+                    MessageBox.Show("Please make sure the limit boxes have numbers in them");
+                    tbLimitInvoice.Text = "25";
+                    tbLimitInvoiceDetails.Text = "50";
+                    return;
+                }
+
+                //if the limit boxes have words in them and not letters, give an error
+                if (Int32.TryParse(limitInvoice, out limitInvoiceInt) && Int32.TryParse(limitInvoiceDetails, out limitInvoiceDetailsInt))
+                {
+                    //begin of load data for invoices table
+                    StringBuilder queryBuilderOne = new StringBuilder();
+                    queryBuilderOne.Append("SELECT TOP ");
+                    queryBuilderOne.Append(limitInvoice);
+                    queryBuilderOne.Append(" * FROM NewInvoices WHERE DateInv BETWEEN \'");
+                    queryBuilderOne.Append(fromDate);
+                    queryBuilderOne.Append("\' AND \'");
+                    queryBuilderOne.Append(toDate);
+                    queryBuilderOne.Append("\'");
+                    //If the user is searching something
+                    if (!String.IsNullOrEmpty(searchString))
+                    {
+                        if (radioID.Checked)
+                        {
+                            queryBuilderOne.Append(" AND ID = \'");
+                        }
+                        else if (radioCompany.Checked)
+                        {
+                            queryBuilderOne.Append(" AND CompanyName = \'");
+                        }
+                        queryBuilderOne.Append(searchString);
+                        queryBuilderOne.Append("\'");
+                    }
+                    //For the payment radio buttons, if any are chosen]
+                    else if (radioPaid.Checked)
+                    {
+                        queryBuilderOne.Append(" AND ToPay = 0 ");
+                    }
+                    else if (radioNotPaid.Checked)
+                    {
+                        queryBuilderOne.Append(" AND Paid != Total ");
+                    }
+                    queryBuilderOne.Append(" ORDER BY DateInv DESC");
+
+                    //begin of load data for invoices details table
+                    StringBuilder queryBuilderTwo = new StringBuilder();
+                    queryBuilderTwo.Append("SELECT TOP ");
+                    queryBuilderTwo.Append(limitInvoiceDetails);
+                    queryBuilderTwo.Append(" NewInvoicesDetails.InvoiceID, Materials.Name, Quantity, Price ");
+                    queryBuilderTwo.Append(" FROM NewInvoicesDetails INNER JOIN Materials ON NewInvoicesDetails.MaterialID = Materials.ID ");
+                    queryBuilderTwo.Append(" INNER JOIN NewInvoices ON NewInvoicesDetails.InvoiceID = NewInvoices.ID ");
+                    queryBuilderTwo.Append(" WHERE NewInvoices.DateInv BETWEEN \'");
+                    queryBuilderTwo.Append(fromDate);
+                    queryBuilderTwo.Append("\' AND \'");
+                    queryBuilderTwo.Append(toDate);
+                    queryBuilderTwo.Append("\'");
+                    //If the user is searching something
+                    if (!String.IsNullOrEmpty(searchString))
+                    {
+                        if (radioID.Checked)
+                        {
+                            queryBuilderTwo.Append(" AND NewInvoices.ID = \'");
+                        }
+                        else if (radioCompany.Checked)
+                        {
+                            queryBuilderTwo.Append(" AND CompanyName = \'");
+                        }
+                        queryBuilderTwo.Append(searchString);
+                        queryBuilderTwo.Append("\' ");
+                    }
+                    //For the payment radio buttons, if any are chosen]
+                    else if (radioPaid.Checked)
+                    {
+                        queryBuilderTwo.Append(" AND ToPay = 0 ");
+                    }
+                    else if (radioNotPaid.Checked)
+                    {
+                        queryBuilderTwo.Append(" AND Paid != Total ");
+                    }
+                    queryBuilderTwo.Append(" ORDER BY DateInv DESC");
+
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(queryBuilderOne.ToString(), con);
+                    SqlDataAdapter adapter2 = new SqlDataAdapter(queryBuilderTwo.ToString(), con);
+                    DataTable dt = new DataTable();
+                    DataTable dt2 = new DataTable();
+                    adapter.Fill(dt);
+                    adapter2.Fill(dt2);
+                    dgvInvoices.DataSource = dt;
+                    dgvInvoicesDetails.DataSource = dt2;
+
+                    loadFinances();
+
+                }
+                else
+                {
+                    MessageBox.Show("Please make sure the limit boxes have numbers in them");
+                    tbLimitInvoice.Text = "25";
+                    tbLimitInvoiceDetails.Text = "50";
+                    return;
+                }
             }
             catch (Exception msg)
             {
@@ -89,9 +238,13 @@ namespace Construction
             }
         }
 
-        private void reloadData()
+        private void btnSearch_Click(object sender, EventArgs e)
         {
-            //check if connection is closed, if so open it
+            if (con.State == ConnectionState.Open)
+            {
+                con.Close();
+            }
+
             if (con.State != ConnectionState.Open)
             {
                 con.Open();
@@ -99,27 +252,54 @@ namespace Construction
 
             try
             {
-                if (String.IsNullOrEmpty(tbPaymentLimit.Text.ToString()))
-                    return;
-                int limit = Int32.Parse(tbPaymentLimit.Text.ToString());
-                string query = "SELECT TOP " + limit + " * FROM Invoices WHERE Date BETWEEN '" + dtPickerFrom.Value + "' AND '" + DateTime.Now + "' ORDER BY Date DESC;";
-                SqlDataAdapter adapter = new SqlDataAdapter(query, con);
-                DataTable dt = new DataTable();
-                adapter.Fill(dt);
-                dgvInvoices.DataSource = dt;
+                String query = "";
+                SqlCommand cmd3 = null;
+                //check if that searched item exists
+                //create search query string
+                if (radioCompany.Checked)
+                {
+                    query = "SELECT CompanyName FROM NewInvoices WHERE CompanyName = @CompanyName";
+                    //create an object SqlCommand that will take the query and the connection string
+                    cmd3 = new SqlCommand(query, con);
+                    //explain what the parameters with @ in the conenction string mean
+                    cmd3.Parameters.AddWithValue("@CompanyName", tbSearch.Text.ToString());
+                }
+                else if (radioID.Checked)
+                {
+                    query = "SELECT ID FROM NewInvoices WHERE ID = @ID";
+                    cmd3 = new SqlCommand(query, con);
+                    //explain what the parameters with @ in the conenction string mean
+                    cmd3.Parameters.AddWithValue("@ID", tbSearch.Text.ToString());
+                }
 
-                //formatting of the datagridview
-                DataGridViewColumn x = dgvInvoices.Columns[0];
-                x.FillWeight = 70;
-                dgvInvoices.Columns[1].FillWeight = 190;
-                tbSearch.Text = "";
-                radioAll.Checked = true;
-                radioNotPaid.Checked = false;
-                radioPaid.Checked = false;
+
+                //create a data reader that will execute the query
+                SqlDataReader dr2 = cmd3.ExecuteReader();
+
+                //if the data reader finds the row, do this
+                if (dr2.Read())
+                {
+                    con.Close();
+                    loadData();
+                }
+
+                else
+                {
+                    if (radioID.Checked)
+                    {
+                        MessageBox.Show("An Invoice with the ID " + tbSearch.Text + " doesn't exist so far!");
+                    }
+                    else if (radioCompany.Checked)
+                    {
+                        MessageBox.Show("A Company with the name " + tbSearch.Text + " doesn't exist so far!");
+                    }
+                    return;
+                }
+
             }
             catch (Exception msg)
             {
-                MessageBox.Show("Oops! An error has occured. Please restart the application");
+                MessageBox.Show("Please make sure the search bar is filled in correctly!");
             }
 
             //close the connection if it is still open
@@ -129,63 +309,48 @@ namespace Construction
             }
         }
 
-        private void tbPaymentLimit_Leave(object sender, EventArgs e)
+        private void radioCompany_Click(object sender, EventArgs e)
         {
+            if (con.State == ConnectionState.Open)
+            {
+                con.Close();
+            }
             loadData();
         }
 
-        private void tbPaymentLimit_KeyDown_1(object sender, KeyEventArgs e)
+        private void radioID_Click(object sender, EventArgs e)
         {
+            if (con.State == ConnectionState.Open)
+            {
+                con.Close();
+            }
             loadData();
         }
 
         private void dtPickerFrom_CloseUp(object sender, EventArgs e)
         {
+            DateTime y = dtPickerFrom.Value;
+            dtPickerFrom.Value = new DateTime(y.Year, y.Month, y.Day, 00, 00, 00);
+            if (dtPickerTo.Value < dtPickerFrom.Value)
+            {
+                DateTime x = dtPickerFrom.Value;
+                MessageBox.Show("Date To cannot take place before Date From");
+                dtPickerTo.Value = new DateTime(x.Year, x.Month, x.Day, 23, 59, 59);
+            }
             loadData();
         }
 
         private void dtPickerTo_CloseUp(object sender, EventArgs e)
         {
+            DateTime y = dtPickerTo.Value;
+            dtPickerTo.Value = new DateTime(y.Year, y.Month, y.Day, 23, 59, 30);
+            if (dtPickerTo.Value < dtPickerFrom.Value)
+            {
+                DateTime x = dtPickerFrom.Value;
+                MessageBox.Show("Date To cannot take place before Date From");
+                dtPickerTo.Value = new DateTime(x.Year, x.Month, x.Day, 23, 59, 59);
+            }
             loadData();
-        }
-
-        private void btnReload_Click(object sender, EventArgs e)
-        {
-            tbSearch.Text = "";
-            radioAll.Checked = true;
-            radioNotPaid.Checked = false;
-            radioPaid.Checked = false;
-            loadData();
-        }
-
-        private void btnSearch_Click(object sender, EventArgs e)
-        {
-            String searchQuery = tbSearch.Text.ToString();
-            searchByCompany(searchQuery);
-        }
-
-        private void searchByCompany(String searchQuery)
-        {
-            string query = "";
-            if (String.IsNullOrEmpty(tbPaymentLimit.Text.ToString()))
-                return;
-            int limit = Int32.Parse(tbPaymentLimit.Text.ToString());
-
-            if(radioAll.Checked)
-                query = "SELECT TOP " + limit + " * FROM Invoices WHERE CompanyName like '"+searchQuery+"' AND Date BETWEEN '" + dtPickerFrom.Value + "' AND '" + dtPickerTo.Value + "' ORDER BY Date DESC";
-            else if (radioPaid.Checked)
-                query = "SELECT TOP " + limit + " * FROM Invoices WHERE ToPay = 0 AND CompanyName like '"+searchQuery+"' AND Date BETWEEN '" + dtPickerFrom.Value + "' AND '" + dtPickerTo.Value + "' ORDER BY Date DESC;";
-            else if(radioNotPaid.Checked)
-                query = "SELECT TOP " + limit + " * FROM Invoices WHERE Paid != Total AND CompanyName like '" + searchQuery + "' AND Date BETWEEN '" + dtPickerFrom.Value + "' AND '" + dtPickerTo.Value + "' ORDER BY Date DESC;";
-            SqlDataAdapter adapter = new SqlDataAdapter(query, con);
-            DataTable dt = new DataTable();
-            adapter.Fill(dt);
-            dgvInvoices.DataSource = dt;
-
-            //formatting of the datagridview
-            DataGridViewColumn x = dgvInvoices.Columns[0];
-            x.FillWeight = 70;
-            dgvInvoices.Columns[1].FillWeight = 190;
         }
 
         private void radioAll_Click(object sender, EventArgs e)
@@ -195,442 +360,212 @@ namespace Construction
 
         private void radioPaid_Click(object sender, EventArgs e)
         {
-            loadDataAllPaid();
-        }
-
-        private void loadDataAllPaid()
-        {
-            String searchQuery = tbSearch.Text.ToString();
-            String query = "";
-            if (String.IsNullOrEmpty(tbPaymentLimit.Text.ToString()))
-                return;
-            int limit = Int32.Parse(tbPaymentLimit.Text.ToString());
-            if (!String.IsNullOrEmpty(searchQuery)) 
-                query = "SELECT TOP " + limit + " * FROM Invoices WHERE ToPay = 0 AND CompanyName like '" + searchQuery + "' AND Date BETWEEN '" + dtPickerFrom.Value + "' AND '" + dtPickerTo.Value + "' ORDER BY Date DESC;"; 
-            else
-                query = "SELECT TOP " + limit + " * FROM Invoices WHERE ToPay = 0 AND Date BETWEEN '" + dtPickerFrom.Value + "' AND '" + dtPickerTo.Value + "' ORDER BY Date DESC;";
-            SqlDataAdapter adapter = new SqlDataAdapter(query, con);
-            DataTable dt = new DataTable();
-            adapter.Fill(dt);
-            dgvInvoices.DataSource = dt;
-
-            //formatting of the datagridview
-            DataGridViewColumn x = dgvInvoices.Columns[0];
-            x.FillWeight = 70;
-            dgvInvoices.Columns[1].FillWeight = 190;
+            loadData();
         }
 
         private void radioNotPaid_Click(object sender, EventArgs e)
         {
-            loadAllNotPaidData();
-        }
-
-        private void loadAllNotPaidData()
-        {
-            String searchQuery = tbSearch.Text.ToString();
-            String query = "";
-            if (String.IsNullOrEmpty(tbPaymentLimit.Text.ToString()))
-                return;
-            int limit = Int32.Parse(tbPaymentLimit.Text.ToString());
-            if (!String.IsNullOrEmpty(searchQuery))
-                query = "SELECT TOP " + limit + " * FROM Invoices WHERE Paid != Total AND CompanyName like '" + searchQuery + "' AND Date BETWEEN '" + dtPickerFrom.Value + "' AND '" + dtPickerTo.Value + "' ORDER BY Date DESC;";
-            else
-                query = "SELECT TOP " + limit + " * FROM Invoices WHERE Paid != Total AND Date BETWEEN '" + dtPickerFrom.Value + "' AND '" + dtPickerTo.Value + "' ORDER BY Date DESC;";
-            SqlDataAdapter adapter = new SqlDataAdapter(query, con);
-            DataTable dt = new DataTable();
-            adapter.Fill(dt);
-            dgvInvoices.DataSource = dt;
-
-            //formatting of the datagridview
-            DataGridViewColumn x = dgvInvoices.Columns[0];
-            x.FillWeight = 70;
-            dgvInvoices.Columns[1].FillWeight = 190;
-        }
-
-        private void btnIDSearch_Click(object sender, EventArgs e)
-        {
-            String searchString = tbID.Text.ToString();
-            searchForID(searchString);
-        }
-
-        private void searchForID(String searchString)
-        {
-            //check if connection is closed, if so open it
-            if (con.State != ConnectionState.Open)
-            {
-                con.Open();
-            }
-
-
-            try
-            {
-                //create search query string
-                string query = "SELECT * FROM Invoices where ID = @ID;";
-
-                //create an object SqlCommand that will take the query and the connection string
-                SqlCommand cmd = new SqlCommand(query, con);
-
-                cmd.Parameters.AddWithValue("@ID", searchString);
-
-
-                //create a data reader that will execute the query
-                SqlDataReader dr = cmd.ExecuteReader();
-
-                //if the data reader finds the row, do this
-                if (dr.Read())
-                {
-                    tbID.Text = dr.GetString(0);
-                    tbCompanyName.Text = dr.GetString(1);
-                    DateTime newDate = dr.GetDateTime(2);
-                    dtInvoiceDate.Value = newDate;
-
-                    tbM1Weight.isPlaceHolder = true;
-                    tbM1Weight.removePlaceHolder();
-                    tbM1Weight.Text = dr.GetFloat(3).ToString();
-
-                    tbM1Price.isPlaceHolder = true;
-                    tbM1Price.removePlaceHolder();
-                    tbM1Price.Text = dr.GetFloat(4).ToString();
-
-                    tbM2Amount.isPlaceHolder = true;
-                    tbM2Amount.removePlaceHolder();
-                    tbM2Amount.Text = dr.GetFloat(5).ToString();
-
-                    tbM2Price.isPlaceHolder = true;
-                    tbM2Price.removePlaceHolder();
-                    tbM2Price.Text = dr.GetFloat(6).ToString();
-
-                    tbM3Weight.isPlaceHolder = true;
-                    tbM3Weight.removePlaceHolder();
-                    tbM3Weight.Text = dr.GetFloat(7).ToString();
-
-                    tbM3Price.isPlaceHolder = true;
-                    tbM3Price.removePlaceHolder();
-                    tbM3Price.Text = dr.GetFloat(8).ToString();
-
-                    tbPrice.Text = dr.GetFloat(9).ToString();
-                    tbPaid.Text = dr.GetFloat(11).ToString();
-                }
-
-
-                else
-                {
-                    MessageBox.Show("An Invoice with the ID " + searchString + " doesn't exist!");
-
-                }
-            }
-            catch(Exception msg)
-            {
-                MessageBox.Show("An error has occured! Please try again");
-            }
-
-            
-
-            //close the connection if it is still open
-            if (con.State == ConnectionState.Open)
-            {
-                con.Close();
-            }
-        }
-
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-
-            if(Double.Parse(tbPrice.Text.ToString()) < Double.Parse(tbPaid.Text.ToString()))
-            {
-                MessageBox.Show("Please fill in the pricing correctly");
-                return;
-            }
-            if (checkForEmptyTextBoxes())
-            {
-                MessageBox.Show("Please Fill in All the Boxes");
-                return;
-            }
-
-            if (tbCompanyName.Text.ToString().Contains("\"") || tbCompanyName.Text.ToString().Contains("\'"))
-            {
-                MessageBox.Show("Quotations (\") and Apostrophes (\') are not Allowed ");
-                return;
-            }
-            
-            String ID = tbID.Text.ToString();
-            if (checkIfIDExists(ID))
-            {
-                updateInvoice();
-            }
-            else
-            {
-                insertInvoice();
-            }
-        }
-
-        private void updateInvoice()
-        {
-            bool hasErred = false;
-            String totalPay = "", toPayStr = "", paid = "", ID = "";
-
-            //check if connection is closed, if so open it
-            if (con.State != ConnectionState.Open)
-            {
-                con.Open();
-            }
-
-            try
-            {
-                SqlCommand cmd = new SqlCommand("UpdateInvoice", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@ID", tbID.Text.ToString());
-                cmd.Parameters.AddWithValue("@CompanyName", tbCompanyName.Text.ToString());
-                cmd.Parameters.AddWithValue("@Date", dtInvoiceDate.Value);
-                if (String.IsNullOrEmpty(tbM1Weight.Text.ToString()))
-                    cmd.Parameters.AddWithValue("@M1Weight", 0);
-                else
-                    cmd.Parameters.AddWithValue("@M1Weight", Double.Parse(tbM1Weight.Text.ToString()));
-
-                if (String.IsNullOrEmpty(tbM1Price.Text.ToString()))
-                    cmd.Parameters.AddWithValue("@M1Price", 0);
-                else
-                    cmd.Parameters.AddWithValue("@M1Price", Double.Parse(tbM1Price.Text.ToString()));
-
-                if (String.IsNullOrEmpty(tbM2Amount.Text.ToString()))
-                    cmd.Parameters.AddWithValue("@M2Amount", 0);
-                else
-                    cmd.Parameters.AddWithValue("@M2Amount", Double.Parse(tbM2Amount.Text.ToString()));
-
-                if (String.IsNullOrEmpty(tbM2Price.Text.ToString()))
-                    cmd.Parameters.AddWithValue("@M2Price", 0);
-                else
-                    cmd.Parameters.AddWithValue("@M2Price", Double.Parse(tbM2Price.Text.ToString()));
-
-                if (String.IsNullOrEmpty(tbM3Weight.Text.ToString()))
-                    cmd.Parameters.AddWithValue("@M3Weight", 0);
-                else
-                    cmd.Parameters.AddWithValue("@M3Weight", Double.Parse(tbM3Weight.Text.ToString()));
-
-                if (String.IsNullOrEmpty(tbM3Price.Text.ToString()))
-                    cmd.Parameters.AddWithValue("@M3Price", 0);
-                else
-                    cmd.Parameters.AddWithValue("@M3Price", Double.Parse(tbM3Price.Text.ToString()));
-
-                cmd.Parameters.AddWithValue("@Total", Double.Parse(tbPrice.Text.ToString()));
-                cmd.Parameters.AddWithValue("@Paid", Double.Parse(tbPaid.Text.ToString()));
-                double toPay = Double.Parse(tbPrice.Text.ToString()) - Double.Parse(tbPaid.Text.ToString());
-                cmd.Parameters.AddWithValue("@ToPay", toPay);
-
-
-                totalPay = tbPrice.Text.ToString();
-                paid = tbPaid.Text.ToString();
-                ID = tbID.Text.ToString();
-                toPayStr = toPay.ToString();
-
-                cmd.ExecuteNonQuery();
-                tbID.Text = "";
-                tbCompanyName.Text = "";
-                tbM1Weight.Text = "";
-                tbM1Weight.setPlaceholder();
-                tbM1Price.Text = "";
-                tbM1Price.setPlaceholder();
-                tbM2Amount.Text = "";
-                tbM2Amount.setPlaceholder();
-                tbM2Price.Text = "";
-                tbM2Price.setPlaceholder();
-                tbM3Weight.Text = "";
-                tbM3Weight.setPlaceholder();
-                tbM3Price.Text = "";
-                tbM3Price.setPlaceholder();
-                tbPaid.Text = "";
-                tbPrice.Text = "";
-            }
-
-            catch (Exception msg)
-            {
-                MessageBox.Show("Oops! An error has occured. Please recheck what you entered");
-                hasErred = true;
-            }
-
-            //close the connection if it is still open
-            if (con.State == ConnectionState.Open)
-            {
-                con.Close();
-            }
-
-            if (hasErred)
-                return;
-
-
-            dgvInvoices.Invalidate();
-            dgvInvoices.Refresh();
-            dgvInvoices.DataSource = null;
-            dgvInvoices.Refresh();
-
-            MessageBox.Show("Invoice of ID " + ID + " has been updated with the following details \nTotal Price: " + totalPay +
-                " \nAmount Paid: " + paid + " \nAmount Left: " + toPayStr);
             loadData();
         }
 
-        private void insertInvoice()
+        private void tbLimitInvoice_Leave(object sender, EventArgs e)
         {
-            bool hasErred = false;
-            String totalPay = "", toPayStr = "", paid = "", ID = "";
-
-            //check if connection is closed, if so open it
-            if (con.State != ConnectionState.Open)
-            {
-                con.Open();
-            }
-
-            try
-            {
-                SqlCommand cmd = new SqlCommand("InsertInvoice", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@ID", tbID.Text.ToString());
-                cmd.Parameters.AddWithValue("@CompanyName", tbCompanyName.Text.ToString());
-                cmd.Parameters.AddWithValue("@Date", dtInvoiceDate.Value);
-
-                if (String.IsNullOrEmpty(tbM1Weight.Text.ToString()))
-                    cmd.Parameters.AddWithValue("@M1Weight", 0);
-                else
-                    cmd.Parameters.AddWithValue("@M1Weight", Double.Parse(tbM1Weight.Text.ToString()));
-
-                if (String.IsNullOrEmpty(tbM1Price.Text.ToString()))
-                    cmd.Parameters.AddWithValue("@M1Price", 0);
-                else
-                    cmd.Parameters.AddWithValue("@M1Price", Double.Parse(tbM1Price.Text.ToString()));
-
-                if (String.IsNullOrEmpty(tbM2Amount.Text.ToString()))
-                    cmd.Parameters.AddWithValue("@M2Weight", 0);
-                else
-                    cmd.Parameters.AddWithValue("@M2Weight", Double.Parse(tbM2Amount.Text.ToString()));
-
-                if (String.IsNullOrEmpty(tbM2Price.Text.ToString()))
-                    cmd.Parameters.AddWithValue("@M2Price", 0);
-                else
-                    cmd.Parameters.AddWithValue("@M2Price", Double.Parse(tbM2Price.Text.ToString()));
-
-                if (String.IsNullOrEmpty(tbM3Weight.Text.ToString()))
-                    cmd.Parameters.AddWithValue("@M3Weight", 0);
-                else
-                    cmd.Parameters.AddWithValue("@M3Weight", Double.Parse(tbM3Weight.Text.ToString()));
-
-
-                if (String.IsNullOrEmpty(tbM3Price.Text.ToString()))
-                    cmd.Parameters.AddWithValue("@M3Price", 0);
-                else
-                    cmd.Parameters.AddWithValue("@M3Price", Double.Parse(tbM3Price.Text.ToString()));
-
-                cmd.Parameters.AddWithValue("@Total", Double.Parse(tbPrice.Text.ToString()));
-                cmd.Parameters.AddWithValue("@Paid", Double.Parse(tbPaid.Text.ToString()));
-                double toPay = Double.Parse(tbPrice.Text.ToString()) - Double.Parse(tbPaid.Text.ToString());
-                cmd.Parameters.AddWithValue("@ToPay", toPay);
-
-
-                totalPay = tbPrice.Text.ToString();
-                paid = tbPaid.Text.ToString();
-                ID = tbID.Text.ToString();
-                toPayStr = toPay.ToString();
-
-                cmd.ExecuteNonQuery();
-                tbID.Text = "";
-                tbCompanyName.Text = "";
-                tbM1Weight.Text = "";
-                tbM1Weight.setPlaceholder();
-                tbM1Price.Text = "";
-                tbM1Price.setPlaceholder();
-                tbM2Amount.Text = "";
-                tbM2Amount.setPlaceholder();
-                tbM2Price.Text = "";
-                tbM2Price.setPlaceholder();
-                tbM3Weight.Text = "";
-                tbM3Weight.setPlaceholder();
-                tbM3Price.Text = "";
-                tbM3Price.setPlaceholder();
-                tbPaid.Text = "";
-                tbPrice.Text = "";
-            }
-
-            catch (Exception msg)
-            {
-                MessageBox.Show("Oops! An error has occured. Please recheck what you entered");
-                hasErred = true;
-            }
-
-            //close the connection if it is still open
-            if (con.State == ConnectionState.Open)
-            {
-                con.Close();
-            }
-
-            if (hasErred)
+            if (tbLimitInvoice.Text.ToString().Length == 0)
                 return;
-
-
-            dgvInvoices.Invalidate();
-            dgvInvoices.Refresh();
-            dgvInvoices.DataSource = null;
-            dgvInvoices.Refresh();
-
-            MessageBox.Show("Invoice of ID " + ID + " has been added with the following details \nTotal Price: " + totalPay +
-                " \nAmount Paid: " + paid + " \nAmount Left: " + toPayStr);
             loadData();
         }
 
-        private bool checkForEmptyTextBoxes()
+        private void tbLimitInvoice_KeyDown(object sender, KeyEventArgs e)
         {
-            if(String.IsNullOrEmpty(tbID.Text) || String.IsNullOrEmpty(tbCompanyName.Text) || dtInvoiceDate.Text.Length == 0
-                || String.IsNullOrEmpty(tbPrice.Text) || String.IsNullOrEmpty(tbPaid.Text))
-            {
-                return true;
-            }
-
-            return false;
+            if (tbLimitInvoice.Text.ToString().Length == 0)
+                return;
+            loadData();
         }
 
-        private bool checkIfIDExists(String ID)
+        private void tbLimitInvoiceDetails_KeyDown(object sender, KeyEventArgs e)
         {
+            if (tbLimitInvoiceDetails.Text.ToString().Length == 0)
+                return;
+            loadData();
+        }
 
-            bool doesExist = false;
+        private void tbLimitInvoiceDetails_Leave(object sender, EventArgs e)
+        {
+            if (tbLimitInvoiceDetails.Text.ToString().Length == 0)
+                return;
+            loadData();
+        }
 
-            //check if connection is closed, if so open it
-            if (con.State != ConnectionState.Open)
-            {
-                con.Open();
-            }
-
-
-            try
-            {
-                //create search query string
-                string query = "SELECT * FROM Invoices where ID = @ID;";
-
-                //create an object SqlCommand that will take the query and the connection string
-                SqlCommand cmd = new SqlCommand(query, con);
-
-                cmd.Parameters.AddWithValue("@ID", ID);
-
-
-                //create a data reader that will execute the query
-                SqlDataReader dr = cmd.ExecuteReader();
-
-                //if the data reader finds the row, do this
-                if (dr.Read())
-                {
-                    doesExist = true;
-                }
-            }
-            catch (Exception msg)
-            {
-                MessageBox.Show("An error has occured! Please try again");
-            }
-
-
-
-            //close the connection if it is still open
+        private void reload()
+        {
             if (con.State == ConnectionState.Open)
             {
                 con.Close();
             }
 
-            return doesExist;
+            tbLimitInvoice.Text = "25";
+            tbLimitInvoiceDetails.Text = "50";
+            tbSearch.setPlaceholder();
+            tbSearch.isPlaceHolder = true;
+            tbSearch.Text = "Search...";
+
+            radioCompany.Checked = true;
+            radioID.Checked = false;
+            DateTime newFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 01, 00, 00, 00);
+            dtPickerFrom.Value = newFrom;
+            dtPickerTo.Value = DateTime.Now;
+            radioAll.Checked = true;
+            radioPaid.Checked = false;
+            radioNotPaid.Checked = false;
+            loadData();
+        }
+
+        private void btnReload_Click(object sender, EventArgs e)
+        {
+            if (con.State == ConnectionState.Open)
+            {
+                con.Close();
+            }
+            reload();
+        }
+
+        private void loadFinances()
+        {
+            Double toPay = 0, paid = 0, total = 0;
+            foreach (DataGridViewRow row in dgvInvoices.Rows)
+            {
+                total = total + Convert.ToDouble(row.Cells[3].Value);
+                toPay = toPay + Convert.ToDouble(row.Cells[4].Value);
+                paid = paid + Convert.ToDouble(row.Cells[5].Value);
+            }
+
+            //round the numbers and set them as the texts of the label
+            labelTotal.Text = String.Format("{0:0.00}", total);
+            labelToPay.Text = String.Format("{0:0.00}", toPay);
+            labelPaid.Text = String.Format("{0:0.00}", paid);
+        }
+
+        private void dgvInvoices_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            dgvInvoices.ClearSelection();
+            //Make columns of datagridview unsortable
+            foreach (DataGridViewColumn column in dgvInvoices.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
+
+            dgvInvoices.Columns[1].HeaderCell.Value = "Company Name";
+            dgvInvoices.Columns[2].HeaderCell.Value = "Date of Sale";
+            dgvInvoices.Columns[3].HeaderCell.Value = "Price";
+            dgvInvoices.Columns[4].HeaderCell.Value = "To Pay";
+            dgvInvoices.Columns[5].HeaderCell.Value = "Paid So Far";
+            dgvInvoices.Columns[3].DefaultCellStyle.Format = "N2";
+            dgvInvoices.Columns[4].DefaultCellStyle.Format = "N2";
+            dgvInvoices.Columns[5].DefaultCellStyle.Format = "N2";
+        }
+
+        private void dgvInvoicesDetails_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            dgvInvoicesDetails.ClearSelection();
+            //Make columns of datagridview unsortable
+            foreach (DataGridViewColumn column in dgvInvoicesDetails.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
+
+            dgvInvoicesDetails.Columns[0].HeaderCell.Value = "Sale ID";
+            dgvInvoicesDetails.Columns[1].HeaderCell.Value = "Name of Material";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (con.State == ConnectionState.Open)
+            {
+                con.Close();
+            }
+            loadData();
+        }
+
+        private void dgvInvoices_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvInvoices.CurrentCell.ColumnIndex.Equals(0))
+            {
+
+            }
+            String limitInvoice = tbLimitInvoice.Text.ToString();
+            String limitInvoiceDetails = tbLimitInvoiceDetails.Text.ToString();
+            String searchString = tbSearch.Text.ToString();
+
+
+            DateTime fromDateOr = dtPickerFrom.Value;
+            DateTime toDateOr = dtPickerTo.Value;
+            DateTime fromDate, toDate;
+
+            //If the user makes it so that toDate = fromDate, make sure toDate starts at 12am
+            if (fromDateOr == toDateOr)
+            {
+                fromDate = new DateTime(fromDateOr.Year, fromDateOr.Month, fromDateOr.Day, 00, 00, 00);
+            }
+            else
+            {
+                fromDate = new DateTime(fromDateOr.Year, fromDateOr.Month, fromDateOr.Day, 23, 59, 0);
+            }
+
+            toDate = new DateTime(toDateOr.Year, toDateOr.Month, toDateOr.Day, 23, 59, 0);
+
+            if (toDate < fromDate)
+            {
+                MessageBox.Show("Please make sure the To Date is higher than the From Date");
+                DateTime newFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 01, 00, 00, 00);
+                dtPickerFrom.Value = newFrom;
+                dtPickerTo.Value = DateTime.Now;
+                return;
+            }
+
+
+            if (dgvInvoices.CurrentCell.ColumnIndex.Equals(0))
+            {
+                String ID = dgvInvoices.CurrentCell.Value.ToString();
+                StringBuilder queryBuilderTwo = new StringBuilder();
+                queryBuilderTwo.Append("SELECT TOP ");
+                queryBuilderTwo.Append(tbLimitInvoiceDetails.Text.ToString());
+                queryBuilderTwo.Append(" NewInvoicesDetails.InvoiceID, Materials.Name, Quantity, Price ");
+                queryBuilderTwo.Append(" FROM NewInvoicesDetails INNER JOIN Materials ON NewInvoicesDetails.MaterialID = Materials.ID ");
+                queryBuilderTwo.Append(" INNER JOIN NewInvoices ON NewInvoicesDetails.InvoiceID = NewInvoices.ID ");
+                queryBuilderTwo.Append(" WHERE NewInvoices.DateInv BETWEEN \'");
+                queryBuilderTwo.Append(fromDate);
+                queryBuilderTwo.Append("\' AND \'");
+                queryBuilderTwo.Append(toDate);
+                queryBuilderTwo.Append("\'");
+                //If the user is searching something
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    if (radioCompany.Checked)
+                    {
+                        queryBuilderTwo.Append(" AND CompanyName = \'");
+                        queryBuilderTwo.Append(searchString);
+                        queryBuilderTwo.Append("\' ");
+                    }
+                }
+                //For the payment radio buttons, if any are chosen]
+                else if (radioPaid.Checked)
+                {
+                    queryBuilderTwo.Append(" AND ToPay = 0 ");
+                }
+                else if (radioNotPaid.Checked)
+                {
+                    queryBuilderTwo.Append(" AND Paid != Total ");
+                }
+                queryBuilderTwo.Append(" AND NewInvoices.ID = \'");
+                queryBuilderTwo.Append(dgvInvoices.CurrentCell.Value.ToString());
+                queryBuilderTwo.Append("\' ORDER BY DateInv DESC");
+
+
+                SqlDataAdapter adapter2 = new SqlDataAdapter(queryBuilderTwo.ToString(), con);
+                DataTable dt2 = new DataTable();
+                adapter2.Fill(dt2);
+                dgvInvoicesDetails.DataSource = dt2;
+            }
         }
     }
 }

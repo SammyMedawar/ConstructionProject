@@ -17,6 +17,7 @@ namespace Construction
         public bool isSearching = false;
         public PlaceholderTextBox[,] tbArray;
         public Label[] labels;
+        public double globalPaid = 0;
         public UpdateInvoice()
         {
             InitializeComponent();
@@ -115,8 +116,7 @@ namespace Construction
                         DateTime newDate = dr.GetDateTime(2);
                         dtInvoiceDate.Value = newDate;
                         tbPrice.Text = dr.GetFloat(3).ToString();
-                        //kl
-                        tbPaid.Text = dr.GetFloat(5).ToString();
+                        globalPaid = dr.GetFloat(5);
                         hasDoneOne = true;
                     }
                     if (dr.GetInt32(6) == 1)
@@ -364,6 +364,12 @@ namespace Construction
                 return;
             }
 
+            if(tbCompanyName.Text.ToString().Contains("\"") || tbCompanyName.Text.ToString().Contains("\'"))
+            {
+                MessageBox.Show("Please note that the Company Name textbox should not contain any apostrophes (\') or quotations (\")!");
+                return;
+            }
+
             double z = 0, y = 0;
 
             String ID = tbID.Text.ToString(), companyName = tbCompanyName.Text.ToString();
@@ -399,7 +405,14 @@ namespace Construction
                 //same here
                  total = Double.Parse(tbPrice.Text.ToString());
                  paid = Double.Parse(tbPaid.Text.ToString());
-                 toPay = total - paid;
+
+
+                if (total < 0 || paid < 0 || M1 < 0 || M1P < 0 || M2 < 0 || M2P < 0 || M3 < 0 || M3P < 0 || M4 < 0 || M4P < 0 || M5 < 0 || M5P < 0 || M6 < 0 || M6P < 0)
+                {
+                    MessageBox.Show("The price and/or the payment should not be less than 0!");
+                    return;
+                }
+
             }
             catch(Exception msg)
             {
@@ -413,6 +426,7 @@ namespace Construction
                 return;
             }
 
+
             if (doesIDExists(tbID.Text.ToString()))
             {
                 //check if connection is closed, if so open it
@@ -422,18 +436,34 @@ namespace Construction
                 }
                 try
                 {
-                   
+
+
+
                     //update invoice
+                    globalPaid = globalPaid + paid;
+                    toPay = Double.Parse(tbPrice.Text.ToString()) - globalPaid;
+
+                    if (globalPaid > total)
+                    {
+                        MessageBox.Show("This invoice has already been fully paid!");
+                        return;
+                    }
+
+                    if(paid>total || globalPaid + toPay > total || paid + toPay > total)
+                    {
+                        MessageBox.Show("The payment you are adding should not exceed the total!");
+                        return;
+                    }
                     String query1 = "Update NewInvoices set CompanyName = @CompanyName, Paid = @Paid, ToPay = @ToPay where ID = @ID";
                     SqlCommand cmd = new SqlCommand(query1, con);
                     cmd.Parameters.AddWithValue("@CompanyName", companyName);
-                    cmd.Parameters.AddWithValue("@Paid", paid);
+                    cmd.Parameters.AddWithValue("@Paid", globalPaid);
                     cmd.Parameters.AddWithValue("@ToPay", toPay);
                     cmd.Parameters.AddWithValue("@ID", ID);
 
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Invoice " + ID + " has been updated with the following information:" 
-                        + "\nAmount Paid: " + paid +"\nAmount To Pay: " + toPay +"\nTotal: "+total);
+                        + "\nAmount Added: " + paid +"\nTotal Amount Paid: " + globalPaid +"\nAmount To Pay: " + toPay +"\nTotal: "+total);
                     resetText();
 
                 }
@@ -488,6 +518,12 @@ namespace Construction
                         M5 == 0 && M5P == 0 && M6 == 0 && M6P == 0)
                     {
                         MessageBox.Show("Please fill in at least 1 material");
+                        return;
+                    }
+
+                    if (globalPaid > total)
+                    {
+                        MessageBox.Show("This invoice has already been fully paid!");
                         return;
                     }
 

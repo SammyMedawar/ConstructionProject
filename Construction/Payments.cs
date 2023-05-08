@@ -35,6 +35,21 @@ namespace Construction
 
             try
             {
+                if (String.IsNullOrEmpty(tbPaymentLimit.Text.ToString()))
+                {
+                    MessageBox.Show("Please make sure the limit box has numbers in it");
+                    tbPaymentLimit.Text = "25";
+                    return;
+                }
+
+                if (!Int32.TryParse(tbPaymentLimit.Text, out int j))
+                {
+                    MessageBox.Show("Please make sure the limit box has numbers in it");
+                    tbPaymentLimit.Text = "25";
+                    return;
+
+                }
+
                 double total = 0;
                 if (String.IsNullOrEmpty(tbPaymentLimit.Text.ToString()))
                     return;
@@ -98,11 +113,27 @@ namespace Construction
 
         private void dtPickerFrom_CloseUp(object sender, EventArgs e)
         {
+            DateTime y = dtPickerFrom.Value;
+            dtPickerFrom.Value = new DateTime(y.Year, y.Month, y.Day, 00, 00, 00);
+            if (dtPickerTo.Value < dtPickerFrom.Value)
+            {
+                DateTime x = dtPickerFrom.Value;
+                MessageBox.Show("Date To cannot take place before Date From");
+                dtPickerTo.Value = new DateTime(x.Year, x.Month, x.Day, 23, 59, 59);
+            }
             loadData();
         }
 
         private void dtPickerTo_CloseUp(object sender, EventArgs e)
         {
+            DateTime y = dtPickerTo.Value;
+            dtPickerTo.Value = new DateTime(y.Year, y.Month, y.Day, 23, 59, 30);
+            if(dtPickerTo.Value < dtPickerFrom.Value)
+            {
+                DateTime x = dtPickerFrom.Value;
+                MessageBox.Show("Date To cannot take place before Date From");
+                dtPickerTo.Value = new DateTime(x.Year, x.Month, x.Day, 23, 59, 59);
+            }
             loadData();
         }
 
@@ -203,6 +234,13 @@ namespace Construction
             {
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (Opacity == 1)
+                timer1.Stop();
+            Opacity += 0.2;
         }
     }
 }

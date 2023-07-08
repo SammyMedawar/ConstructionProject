@@ -16,24 +16,40 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 using System.Data.Common;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
+using System.Data.SQLite;
 
 namespace Construction
 {
     public partial class Stock : Form
     {
+        public bool hasCreatedPrices = false;
         //Connection String of the Application
-        SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ToString());
+        SQLiteConnection con = new SQLiteConnection("Data Source=constructionSQLITE.db;Version=3;New=True;Compress=True;", true);
+
+        private static Stock _instance;
+        public static Stock Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new Stock();
+                return _instance;
+            }
+        }
 
         public Stock()
         {
+
+            //SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             InitializeComponent();
             loadData();
             
         }
 
-        private void loadData()
+        public void loadData()
         {
             //check if connection is closed, if so open it
+            con.Close();
             if (con.State != ConnectionState.Open)
             {
                 con.Open();
@@ -56,17 +72,34 @@ namespace Construction
 
                 }
 
+                
+
                 if (String.IsNullOrEmpty(tbStockLimit.Text.ToString()))
+                {
+                    con.Close();
                     return;
+                }
                 int limit = Int32.Parse(tbStockLimit.Text.ToString());
                 string query = "SELECT Name, Weight_Quantity FROM Materials";
-                SqlDataAdapter adapter = new SqlDataAdapter(query, con);
+                string query2 = "SELECT Description, Amount, Type FROM MaterialsRecords ";
+                if (radioRaw.Checked)
+                {
+                    query = query + " WHERE Type = 1";
+                    query2 = query2 + " WHERE Type = '+'";
+                }
+                else if (radioBriques.Checked)
+                {
+                    query = query + " WHERE Type = 0";
+                    query2 = query2 + " WHERE Type = '-'";
+                }
+                query = query + " ORDER BY Name";
+                query2 = query2 + " ORDER BY DateTime DESC LIMIT " + limit;
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(query, con);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
                 dgvMaterials.DataSource = dt;
 
-                string query2 = "SELECT TOP " + limit + " Description, Amount, Type FROM MaterialsRecords ORDER BY DateTime DESC";
-                SqlDataAdapter adapter2 = new SqlDataAdapter(query2, con);
+                SQLiteDataAdapter adapter2 = new SQLiteDataAdapter(query2, con);
                 DataTable dt2 = new DataTable();
                 adapter2.Fill(dt2);
                 dgvMaterialsHistory.DataSource = dt2;
@@ -102,16 +135,16 @@ namespace Construction
         }
         private void btnHomepage_Click(object sender, EventArgs e)
         {
-            //create the homepage
-            Homepage toPage = new Homepage();
+            
             //show the homepage
-            toPage.Show();
+            Homepage.Instance.Show();
+            Homepage.Instance.loadData();
             //hide the current page
             this.Hide();
+
         }
         private void btnStockUpdate_Click(object sender, EventArgs e)
         {
-
             updateStocks();
         }
 
@@ -123,6 +156,87 @@ namespace Construction
             double materialWeight;
             int materialID;
             String materialDescription;
+            foreach (TextBox tv in panelBriques.Controls.OfType<TextBox>())
+            {
+                double jpop = 0;
+                if(tv.Text.ToString().Length != 0)
+                {
+                    if (!Double.TryParse(tv.Text, out jpop))
+                    {
+                        MessageBox.Show("Please make sure the boxes have numbers in them!");
+                        return;
+                    }
+                }
+
+                else
+                {
+                    if (jpop < 0)
+                    {
+                        MessageBox.Show("Negative numbers are not allowed as values inside the textboxes!");
+                        return;
+                    }
+                }
+            }
+            String query = "";
+            foreach (TextBox tv in panelRaw.Controls.OfType<TextBox>())
+            {
+                double jpop = 0;
+                if (tv.Text.ToString().Length != 0)
+                {
+                    if (!Double.TryParse(tv.Text, out jpop))
+                    {
+                        MessageBox.Show("Please make sure the boxes have numbers in them!");
+                        return;
+                    }
+                    if (radioSubtract.Checked) {
+                        int ID = 0;
+                        if (tv.Name == "tbCement") ID = 6;
+                        else if (tv.Name == "tbBlank") ID = 16;
+                        else if (tv.Name == "tbColorant") ID = 15;
+                        else if (tv.Name == "tbGrav1") ID = 1;
+                        else if (tv.Name == "tbGrav4") ID = 2;
+                        else if (tv.Name == "tbGrav5") ID = 3;
+                        else if (tv.Name == "tbGrav6") ID = 13;
+                        else if (tv.Name == "tbGrav8") ID = 14;
+                        else if (tv.Name == "tbGrav15") ID = 4;
+                        else if (tv.Name == "tbSable") ID = 5;
+
+                        if(con.State == ConnectionState.Closed)
+                            con.Open();
+
+                        query = "SELECT Weight_Quantity, Name FROM Materials WHERE ID = @ID";
+                        SQLiteCommand cmd = new SQLiteCommand(query, con);
+                        cmd.Parameters.AddWithValue("@ID", ID);
+                        SQLiteDataReader dr = cmd.ExecuteReader();
+                        if (dr.Read())
+                        {
+                            if (dr.GetFloat(0) - jpop < 0)
+                            {
+                                MessageBox.Show(dr.GetString(1) + " only has " + dr.GetFloat(0) +"! You cannot subtract " + jpop +" from it");
+                                dr.Dispose();
+                                con.Close();
+                                return;
+                            }
+                        }
+
+                        dr.Close();
+                        dr.Dispose();
+
+                        if(con.State == ConnectionState.Open)
+                            con.Close();
+                    }
+                }
+
+                else
+                {
+                    if (jpop < 0)
+                    {
+                        MessageBox.Show("Negative numbers are not allowed as values inside the textboxes!");
+                        con.Close();
+                        return;
+                    }
+                }
+            }
 
             if (!String.IsNullOrEmpty(tbGrav1.Text.ToString()))
             {
@@ -200,17 +314,74 @@ namespace Construction
             if (!String.IsNullOrEmpty(tbCement.Text.ToString()))
             {
                 if (radioSubtract.Checked)
-                    editedText = editedText + "Cement: -" + tbCement.Text.ToString() + "\n";
+                    editedText = editedText + "Ciment: -" + tbCement.Text.ToString() + "\n";
                 else
-                    editedText = editedText + "Cement: " + tbCement.Text.ToString() + "\n";
+                    editedText = editedText + "Ciment: " + tbCement.Text.ToString() + "\n";
                 materialWeight = Double.Parse(tbCement.Text.ToString());
                 materialID = 6;
-                materialDescription = "Cement";
+                materialDescription = "Ciment";
                 updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
                 tbCement.Text = "";
             }
             else
                 count++;
+            if (!String.IsNullOrEmpty(tbGrav6.Text.ToString()))
+            {
+                if (radioSubtract.Checked)
+                    editedText = editedText + "Gravier 0/6: -" + tbGrav6.Text.ToString() + "\n";
+                else
+                    editedText = editedText + "Gravier 0/6: " + tbGrav6.Text.ToString() + "\n";
+                materialWeight = Double.Parse(tbGrav6.Text.ToString());
+                materialID = 13;
+                materialDescription = "Gravier 0/6";
+                updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
+                tbGrav6.Text = "";
+            }
+            else
+                count++;
+            if (!String.IsNullOrEmpty(tbGrav8.Text.ToString()))
+            {
+                if (radioSubtract.Checked)
+                    editedText = editedText + "Gravier 0/8: -" + tbGrav8.Text.ToString() + "\n";
+                else
+                    editedText = editedText + "Gravier 0/8: " + tbGrav8.Text.ToString() + "\n";
+                materialWeight = Double.Parse(tbGrav8.Text.ToString());
+                materialID = 14;
+                materialDescription = "Gravier 0/8";
+                updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
+                tbGrav8.Text = "";
+            }
+            else
+                count++;
+            if (!String.IsNullOrEmpty(tbColorant.Text.ToString()))
+            {
+                if (radioSubtract.Checked)
+                    editedText = editedText + "Colorant: -" + tbColorant.Text.ToString() + "\n";
+                else
+                    editedText = editedText + "Colorant: " + tbColorant.Text.ToString() + "\n";
+                materialWeight = Double.Parse(tbColorant.Text.ToString());
+                materialID = 15;
+                materialDescription = "Colorant";
+                updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
+                tbColorant.Text = "";
+            }
+            else
+                count++;
+            if (!String.IsNullOrEmpty(tbBlank.Text.ToString()))
+            {
+                if (radioSubtract.Checked)
+                    editedText = editedText + "Ciment Blanc: -" + tbBlank.Text.ToString() + "\n";
+                else
+                    editedText = editedText + "Ciment Blanc: " + tbBlank.Text.ToString() + "\n";
+                materialWeight = Double.Parse(tbBlank.Text.ToString());
+                materialID = 16;
+                materialDescription = "Ciment Blanc";
+                updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
+                tbBlank.Text = "";
+            }
+            else
+                count++;
+
 
             //Out Materials
             if (!String.IsNullOrEmpty(tbC10.Text.ToString()))
@@ -297,18 +468,77 @@ namespace Construction
             }
             else
                 count++;
+            if (!String.IsNullOrEmpty(tbPav6.Text.ToString()))
+            {
+                if (radioSubtract.Checked)
+                    editedText = editedText + "Pavé 6cm: -" + tbPav6.Text.ToString() + "\n";
+                else
+                    editedText = editedText + "Pavé 6cm: " + tbPav6.Text.ToString() + "\n";
+                materialWeight = Double.Parse(tbPav6.Text.ToString());
+                materialID = 17;
+                materialDescription = "Pavé 6cm";
+                updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
+                tbPav6.Text = "";
+            }
+            else
+                count++;
+            if (!String.IsNullOrEmpty(tbPav8.Text.ToString()))
+            {
+                if (radioSubtract.Checked)
+                    editedText = editedText + "Pavé 8cm: -" + tbPav8.Text.ToString() + "\n";
+                else
+                    editedText = editedText + "Pavé 8cm: " + tbPav8.Text.ToString() + "\n";
+                materialWeight = Double.Parse(tbPav8.Text.ToString());
+                materialID = 18;
+                materialDescription = "Pavé 8cm";
+                updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
+                tbPav8.Text = "";
+            }
+            else
+                count++;
+            if (!String.IsNullOrEmpty(tbPav10.Text.ToString()))
+            {
+                if (radioSubtract.Checked)
+                    editedText = editedText + "Pavé 10cm: -" + tbPav10.Text.ToString() + "\n";
+                else
+                    editedText = editedText + "Pavé 10cm: " + tbPav10.Text.ToString() + "\n";
+                materialWeight = Double.Parse(tbPav10.Text.ToString());
+                materialID = 19;
+                materialDescription = "Pavé 10cm";
+                updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
+                tbPav10.Text = "";
+            }
+            else
+                count++;
+            if (!String.IsNullOrEmpty(tbPav13.Text.ToString()))
+            {
+                if (radioSubtract.Checked)
+                    editedText = editedText + "Pavé 13cm: -" + tbPav13.Text.ToString() + "\n";
+                else
+                    editedText = editedText + "Pavé 13cm: " + tbPav13.Text.ToString() + "\n";
+                materialWeight = Double.Parse(tbPav13.Text.ToString());
+                materialID = 20;
+                materialDescription = "Pavé 13cm";
+                updateStock(materialID, materialWeight, materialDescription, currentDateTime, editedText);
+                tbPav13.Text = "";
+            }
+            else
+                count++;
 
-            if(count >= 12)
+            if (count >= 20)
             {
                 MessageBox.Show("Please fill in at least one of the boxes!");
                 return;
             }
 
             MessageBox.Show(editedText);
+            if (!radioSubtract.Enabled)
+                radioSubtract.Enabled = true;
         }
 
         private void updateStock(int materialID, double materialWeight, String materialDescription, DateTime currentDateTime, String editedText)
         {
+            con.Close();
             if (con.State != ConnectionState.Open)
             {
                 con.Open();
@@ -316,30 +546,51 @@ namespace Construction
 
             try
             {
-                SqlCommand cmd = new SqlCommand("UpdateStock", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@MaterialID", materialID);
-
-                if (radioSubtract.Checked)
+                using (var trans = con.BeginTransaction())
                 {
-                    materialWeight = materialWeight * -1;
-                    cmd.Parameters.AddWithValue("@AddedValue", materialWeight);
-                    cmd.Parameters.AddWithValue("@AbsoluteValue", Math.Abs(materialWeight));
-                    cmd.Parameters.AddWithValue("@Type", '-');
-                    editedText = editedText + materialDescription + " by subtracting " + materialWeight * -1 + " ";
-                }
-                else
-                {
-                    cmd.Parameters.AddWithValue("@AddedValue", materialWeight);
-                    cmd.Parameters.AddWithValue("@AbsoluteValue", Math.Abs(materialWeight));
-                    cmd.Parameters.AddWithValue("@Type", '+');
-                    editedText = editedText + materialDescription + " by adding " + materialWeight + " ";
+                    try
+                    {
+                        String query1 = "";
+                        if (radioAdd.Checked)
+                            query1 = "UPDATE Materials SET Weight_Quantity = Weight_Quantity + @AddedValue WHERE ID = @MaterialID;";
+                        else if (radioSubtract.Checked)
+                            query1 = "UPDATE Materials SET Weight_Quantity = Weight_Quantity - @AddedValue WHERE ID = @MaterialID;";
+                        String query2 = "INSERT INTO MaterialsRecords (Description, Amount, Type, DateTime) VALUES (@Description, @AbsoluteValue, @Type, @DateTime);";
+
+                        SQLiteCommand cmd = new SQLiteCommand(query1, con);
+                        SQLiteCommand cmd2 = new SQLiteCommand(query2, con);
+
+                        cmd.Parameters.AddWithValue("@MaterialID", materialID);
+                        cmd.Parameters.AddWithValue("@AddedValue", materialWeight);
+
+                        cmd2.Parameters.AddWithValue("@Description", materialDescription);
+                        cmd2.Parameters.AddWithValue("@DateTime", currentDateTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                        if (radioSubtract.Checked)
+                        {
+                            materialWeight = materialWeight * -1;
+                            cmd2.Parameters.AddWithValue("@AbsoluteValue", Math.Abs(materialWeight));
+                            cmd2.Parameters.AddWithValue("@Type", "-");
+                            editedText = editedText + materialDescription + " by subtracting " + materialWeight * -1 + " ";
+                        }
+                        else
+                        {
+                            cmd2.Parameters.AddWithValue("@AbsoluteValue", Math.Abs(materialWeight));
+                            cmd2.Parameters.AddWithValue("@Type", "+");
+                            editedText = editedText + materialDescription + " by adding " + materialWeight + " ";
+                        }
+
+                        cmd.ExecuteNonQuery();
+                        cmd2.ExecuteNonQuery();
+                        trans.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        trans.Rollback();
+                        Console.WriteLine("Transaction rolled back. Reason: " + ex.Message);
+                    }
                 }
 
-                cmd.Parameters.AddWithValue("@Description", materialDescription);
-                cmd.Parameters.AddWithValue("@DateTime", currentDateTime);
-
-                cmd.ExecuteNonQuery();
+                radioAll.Checked = true;
                 dgvMaterialsHistory.Invalidate();
                 dgvMaterialsHistory.Refresh();
                 loadData();
@@ -347,6 +598,7 @@ namespace Construction
             }
             catch (Exception msg)
             {
+                
                 MessageBox.Show("Oops! An error has occurred. Please recheck what you entered");
             }
 
@@ -358,15 +610,6 @@ namespace Construction
         }
 
         private void tbStockLimit_KeyDown(object sender, KeyEventArgs e)
-        {
-            loadData();
-        }
-
-        private void dtPickerFrom_CloseUp(object sender, EventArgs e)
-        {
-            loadData();
-        }
-        private void dtPickerTo_CloseUp(object sender, EventArgs e)
         {
             loadData();
         }
@@ -395,6 +638,7 @@ namespace Construction
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
             this.dgvMaterialsHistory.DefaultCellStyle.Font = new Font("Microsoft Sans Serif", 12);
+            dgvMaterialsHistory.Columns[1].DefaultCellStyle.Format = "N2";
         }
 
         private void dgvMaterials_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -406,13 +650,127 @@ namespace Construction
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
             this.dgvMaterials.DefaultCellStyle.Font = new Font("Microsoft Sans Serif", 12);
+            dgvMaterials.Columns[1].DefaultCellStyle.Format = "N2";
+            dgvMaterials.Columns[1].HeaderCell.Value = "Weight/Quantity";
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (Opacity == 1)
                 timer1.Stop();
-            Opacity += .2;
+            Opacity += .9;
+        }
+
+        private void radioSubtract_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioSubtract.Checked)
+            {
+                foreach (TextBox tb in panelBriques.Controls.OfType<TextBox>())
+                {
+                    tb.Enabled = false;
+                }
+            }
+            else
+            {
+                foreach(TextBox tb in panelBriques.Controls.OfType<TextBox>())
+                {
+                    tb.Enabled = true;
+                }
+            }
+        }
+
+        private void tbC10_Leave(object sender, EventArgs e)
+        {
+            bool hasAtLeastOneBoxFilled = false;
+            foreach(TextBox tv in panelBriques.Controls.OfType<TextBox>())
+            {
+                if(tv.Text.ToString().Length != 0)
+                {
+                    hasAtLeastOneBoxFilled = true;
+                    radioSubtract.Enabled = false;
+                    if (radioSubtract.Checked == true)
+                    {
+                        radioAdd.Checked = true;
+                    }
+                }
+            }
+
+            if (!hasAtLeastOneBoxFilled)
+            {
+                radioSubtract.Enabled = true;
+            }
+        }
+
+        private void flowLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void tbC10_TextChanged(object sender, EventArgs e)
+        {
+            bool hasAtLeastOneBoxFilled = false;
+            foreach (TextBox tv in panelBriques.Controls.OfType<TextBox>())
+            {
+                if (tv.Text.ToString().Length != 0)
+                {
+                    hasAtLeastOneBoxFilled = true;
+                    radioSubtract.Enabled = false;
+                    if (radioSubtract.Checked == true)
+                    {
+                        radioAdd.Checked = true;
+                    }
+                }
+            }
+
+            if (!hasAtLeastOneBoxFilled)
+            {
+                radioSubtract.Enabled = true;
+            }
+        }
+
+        private void radioAll_Click(object sender, EventArgs e)
+        {
+            loadData();
+        }
+
+        private void tbCement_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
+
+        private void tbBlank_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void Stock_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            ucSettings.Instance.backupData();
+            System.Windows.Forms.Application.Exit();
+        }
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+
+        private void tbP20_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && (e.KeyCode == Keys.C || e.KeyCode == Keys.X))
+            {
+                // Disable copying and cutting
+                e.SuppressKeyPress = true;
+            }
+
+            base.OnKeyDown(e);
+        }
+
+        private void tbStockLimit_TextChanged(object sender, EventArgs e)
+        {
+            loadData();
         }
     }
 }

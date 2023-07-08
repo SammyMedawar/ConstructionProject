@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -24,9 +26,10 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -47,7 +50,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>logo %282%29.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AnalysisServices.AppLocal, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.AnalysisServices.AppLocal.Tabular, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
     <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
@@ -60,10 +72,17 @@
       <HintPath>..\packages\Microsoft.Report.Viewer.11.0.0.0\lib\net\Microsoft.ReportViewer.WebForms.DLL</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite">
-      <HintPath>..\..\..\..\OneDrive\Desktop\System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Data.SQLite, Version=1.0.117.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\lib\net46\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.117.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.117.0\lib\net46\System.Data.SQLite.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.117.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.117.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -81,6 +100,18 @@
     </Compile>
     <Compile Include="frmPrint.Designer.cs">
       <DependentUpon>frmPrint.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPrintRecordPayments.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPrintRecordPayments.Designer.cs">
+      <DependentUpon>frmPrintRecordPayments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPrntRow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPrntRow.Designer.cs">
+      <DependentUpon>frmPrntRow.cs</DependentUpon>
     </Compile>
     <Compile Include="Homepage.cs">
       <SubType>Form</SubType>
@@ -100,17 +131,6 @@
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
-    <Compile Include="myDB.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>myDB.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="NewInvoices.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="NewInvoices.Designer.cs">
-      <DependentUpon>NewInvoices.cs</DependentUpon>
-    </Compile>
     <Compile Include="Payments.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,6 +139,12 @@
     </Compile>
     <Compile Include="PlaceholderTextBox.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Prices.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Prices.Designer.cs">
+      <DependentUpon>Prices.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -141,20 +167,46 @@
     <Compile Include="ucInvoiceAdd.Designer.cs">
       <DependentUpon>ucInvoiceAdd.cs</DependentUpon>
     </Compile>
+    <Compile Include="ucInvoicePayment.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucInvoicePayment.Designer.cs">
+      <DependentUpon>ucInvoicePayment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ucPrice.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucPrice.Designer.cs">
+      <DependentUpon>ucPrice.cs</DependentUpon>
+    </Compile>
     <Compile Include="ucSalesAdd.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ucSalesAdd.Designer.cs">
       <DependentUpon>ucSalesAdd.cs</DependentUpon>
     </Compile>
-    <Compile Include="UpdateInvoice.cs">
-      <SubType>Form</SubType>
+    <Compile Include="ucSalesPayment.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UpdateInvoice.Designer.cs">
-      <DependentUpon>UpdateInvoice.cs</DependentUpon>
+    <Compile Include="ucSalesPayment.Designer.cs">
+      <DependentUpon>ucSalesPayment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ucSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucSettings.Designer.cs">
+      <DependentUpon>ucSettings.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="frmPrint.resx">
       <DependentUpon>frmPrint.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPrintRecordPayments.resx">
+      <DependentUpon>frmPrintRecordPayments.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPrntRow.resx">
+      <DependentUpon>frmPrntRow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Homepage.resx">
       <DependentUpon>Homepage.cs</DependentUpon>
@@ -165,11 +217,11 @@
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewInvoices.resx">
-      <DependentUpon>NewInvoices.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Payments.resx">
       <DependentUpon>Payments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Prices.resx">
+      <DependentUpon>Prices.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -189,22 +241,23 @@
     <EmbeddedResource Include="ucInvoiceAdd.resx">
       <DependentUpon>ucInvoiceAdd.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ucInvoicePayment.resx">
+      <DependentUpon>ucInvoicePayment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ucPrice.resx">
+      <DependentUpon>ucPrice.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ucSalesAdd.resx">
       <DependentUpon>ucSalesAdd.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UpdateInvoice.resx">
-      <DependentUpon>UpdateInvoice.cs</DependentUpon>
+    <EmbeddedResource Include="ucSalesPayment.resx">
+      <DependentUpon>ucSalesPayment.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="myDB.xsc">
-      <DependentUpon>myDB.xsd</DependentUpon>
-    </None>
-    <None Include="myDB.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>myDB.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="myDB.xss">
-      <DependentUpon>myDB.xsd</DependentUpon>
+    <EmbeddedResource Include="ucSettings.resx">
+      <DependentUpon>ucSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="constructionSQLITE.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -221,15 +274,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="constructionDatabase.mdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="constructionDatabase_log.ldf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <DependentUpon>constructionDatabase.mdf</DependentUpon>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
@@ -241,5 +285,18 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="logo %282%29.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <Import Project="..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.117.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
 </Project>

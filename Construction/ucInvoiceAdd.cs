@@ -8,21 +8,58 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Linq.Expressions;
+using System.Data.SQLite;
 
 namespace Construction
 {
     public partial class ucInvoiceAdd : UserControl
     {
-        SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ToString());
+        SQLiteConnection con = new SQLiteConnection("Data Source=constructionSQLITE.db;Version=3;New=True;Compress=True;", true);
         public bool isSearching = false;
         public PlaceholderTextBox[,] tbArray;
         public Label[] labels;
-        public double globalPaid = 0;
+        public double globalDiscount = 0;
 
+        private void loadDataOntoCombo()
+        {
+            con.Close();
+            if (con.State != ConnectionState.Open)
+            {
+                con.Open();
+            }
+
+            try
+            {
+                string query = "SELECT DISTINCT CompanyName FROM PaymentHistory;";
+                SQLiteCommand cmd = new SQLiteCommand(query, con);
+                SQLiteDataReader dr = cmd.ExecuteReader();
+                tbCompanyName.Items.Clear();
+
+                //if the data reader finds the row, do this
+                while (dr.Read())
+                {
+                    tbCompanyName.Items.Add(dr.GetString(0));
+                }
+                dr.Close();
+                dr.Dispose();
+            }
+            catch (Exception msg)
+            {
+                MessageBox.Show("Oops! An error has occured. Please restart the application");
+            }
+
+            //close the connection if it is still open
+            if (con.State == ConnectionState.Open)
+            {
+                con.Close();
+            }
+        }
         public ucInvoiceAdd()
         {
             InitializeComponent();
-            tbArray = new PlaceholderTextBox[6, 6];
+            loadDataOntoCombo();
+            tbArray = new PlaceholderTextBox[10, 10];
             tbArray[0, 0] = tbM1;
             tbArray[0, 1] = tbM1P;
             tbArray[1, 0] = tbM2;
@@ -35,8 +72,16 @@ namespace Construction
             tbArray[4, 1] = tbM5P;
             tbArray[5, 0] = tbM6;
             tbArray[5, 1] = tbM6P;
+            tbArray[6, 0] = tbM7;
+            tbArray[6, 1] = tbM7P;
+            tbArray[7, 0] = tbM8;
+            tbArray[7, 1] = tbM8P;
+            tbArray[8, 0] = tbM9;
+            tbArray[8, 1] = tbM9P;
+            tbArray[9, 0] = tbM10;
+            tbArray[9, 1] = tbM10P;
 
-            labels = new Label[6] { lab0, lab1, lab2, lab3, lab4, lab5 };
+            labels = new Label[10] { lab0, lab1, lab2, lab3, lab4, lab5, lab6, lab7, lab8, lab9 };
         }
 
         //create singleton
@@ -53,271 +98,44 @@ namespace Construction
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
+            this.Parent.SendToBack();
+            Invoices.Instance.PanelOne.BringToFront();
+            //this.Parent.Parent.Controls.Remove(this.Parent);
             //create the login page
             Login toPage = new Login();
             //show the login page
             toPage.Show();
             //hide the current page
-            this.Hide();
+            this.Parent.Hide();
         }
 
         private void btnBack_Click(object sender, EventArgs e)
         {
             //kinda looks like jquery haha
-            this.Parent.Parent.Controls.Remove(this.Parent);
+            this.Parent.SendToBack();
+            Invoices.Instance.loadAutoCompleteData();
+            Invoices.Instance.PanelOne.BringToFront();
         }
 
         private void btnHomepage_Click(object sender, EventArgs e)
         {
-            //create the homepage
-            Homepage toPage = new Homepage();
+            this.Parent.SendToBack();
+            Invoices.Instance.PanelOne.BringToFront();
+            //this.Parent.Parent.Controls.Remove(this.Parent);
             //show the homepage
-            toPage.Show();
+            Homepage.Instance.Show();
+            Homepage.Instance.loadData();
             //hide the current page
-            this.Hide();
+            this.Parent.Hide();
+            Invoices.Instance.Hide();
         }
-        private void btnIDSearch_Click(object sender, EventArgs e)
-        {
-            isSearching = true;
-            dtInvoiceDate.Enabled = false;
-            tbM1.Enabled = false;
-            tbM1P.Enabled = false;
-            tbM2.Enabled = false;
-            tbM2P.Enabled = false;
-            tbM3.Enabled = false;
-            tbM3P.Enabled = false;
-            tbM4.Enabled = false;
-            tbM4P.Enabled = false;
-            tbM5.Enabled = false;
-            tbM5P.Enabled = false;
-            tbM6.Enabled = false;
-            tbM6P.Enabled = false;
-            tbPrice.Enabled = false;
-            String searchString = tbID.Text.ToString();
-            searchForID(searchString);
-        }
-
-        private void searchForID(String searchString)
-        {
-            //check if connection is closed, if so open it
-            if (con.State != ConnectionState.Open)
-            {
-                con.Open();
-            }
-
-
-            try
-            {
-                bool hasDoneOne = false;
-                //create search query string
-                string query = "SELECT NewInvoices.* , NewInvoicesDetails.MaterialID, NewInvoicesDetails.Quantity, NewInvoicesDetails.Price FROM NewInvoices INNER JOIN NewInvoicesDetails ON NewInvoices.ID = NewInvoicesDetails.InvoiceID where NewInvoices.ID = '" + searchString + "';";
-
-                //create an object SqlCommand that will take the query and the connection string
-                SqlCommand cmd = new SqlCommand(query, con);
-
-
-                //create a data reader that will execute the query
-                SqlDataReader dr = cmd.ExecuteReader();
-
-                //if the data reader finds the row, do this
-                while (dr.Read())
-                {
-                    if (!hasDoneOne)
-                    {
-                        tbID.Text = dr.GetString(0);
-                        tbCompanyName.Text = dr.GetString(1);
-                        DateTime newDate = dr.GetDateTime(2);
-                        dtInvoiceDate.Value = newDate;
-                        tbPrice.Text = dr.GetFloat(3).ToString();
-                        globalPaid = dr.GetFloat(5);
-                        hasDoneOne = true;
-                    }
-                    if (dr.GetInt32(6) == 1)
-                    {
-                        tbM1.removePlaceHolder();
-                        tbM1.Text = dr.GetFloat(7).ToString();
-                        tbM1P.removePlaceHolder();
-                        tbM1P.Text = dr.GetFloat(8).ToString();
-                    }
-                    else if (dr.GetInt32(6) == 2)
-                    {
-                        tbM2.removePlaceHolder();
-                        tbM2.Text = dr.GetFloat(7).ToString();
-                        tbM2P.removePlaceHolder();
-                        tbM2P.Text = dr.GetFloat(8).ToString();
-                    }
-                    else if (dr.GetInt32(6) == 3)
-                    {
-                        tbM3.removePlaceHolder();
-                        tbM3.Text = dr.GetFloat(7).ToString();
-                        tbM3P.removePlaceHolder();
-                        tbM3P.Text = dr.GetFloat(8).ToString();
-                    }
-                    else if (dr.GetInt32(6) == 4)
-                    {
-                        tbM4.removePlaceHolder();
-                        tbM4.Text = dr.GetFloat(7).ToString();
-                        tbM4P.removePlaceHolder();
-                        tbM4P.Text = dr.GetFloat(8).ToString();
-                    }
-                    else if (dr.GetInt32(6) == 5)
-                    {
-                        tbM5.removePlaceHolder();
-                        tbM5.Text = dr.GetFloat(7).ToString();
-                        tbM5P.removePlaceHolder();
-                        tbM5P.Text = dr.GetFloat(8).ToString();
-                    }
-                    else if (dr.GetInt32(6) == 6)
-                    {
-                        tbM6.removePlaceHolder();
-                        tbM6.Text = dr.GetFloat(7).ToString();
-                        tbM6P.removePlaceHolder();
-                        tbM6P.Text = dr.GetFloat(8).ToString();
-                    }
-                }
-
-                labelPaid.Text = "Add Payment";
-                btnAdd.Text = "Update";
-
-
-                if (!hasDoneOne)
-                {
-                    MessageBox.Show("An Invoice with the ID " + searchString + " doesn't exist!");
-                    isSearching = false;
-                    dtInvoiceDate.Enabled = true;
-                    tbM1.Enabled = true;
-                    tbM1P.Enabled = true;
-                    tbM2.Enabled = true;
-                    tbM2P.Enabled = true;
-                    tbM3.Enabled = true;
-                    tbM3P.Enabled = true;
-                    tbM4.Enabled = true;
-                    tbM4P.Enabled = true;
-                    tbM5.Enabled = true;
-                    tbM5P.Enabled = true;
-                    tbM6.Enabled = true;
-                    tbM6P.Enabled = true;
-                    tbPrice.Enabled = true;
-
-                }
-            }
-            catch (Exception msg)
-            {
-                MessageBox.Show("An error has occured! Please try again");
-            }
-
-
-
-            //close the connection if it is still open
-            if (con.State == ConnectionState.Open)
-            {
-                con.Close();
-            }
-        }
-
-        private void tbID_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (isSearching)
-            {
-                isSearching = false;
-                dtInvoiceDate.Enabled = true;
-                tbM1.Enabled = true;
-                tbM1P.Enabled = true;
-                tbM2.Enabled = true;
-                tbM2P.Enabled = true;
-                tbM3.Enabled = true;
-                tbM3P.Enabled = true;
-                tbM4.Enabled = true;
-                tbM4P.Enabled = true;
-                tbM5.Enabled = true;
-                tbM5P.Enabled = true;
-                tbM6.Enabled = true;
-                tbM6P.Enabled = true;
-                tbPrice.Enabled = true;
-                labelPaid.Text = "Paid";
-                btnAdd.Text = "Add";
-            }
-        }
-
-        private void tbID_Leave(object sender, EventArgs e)
-        {
-            if (doesIDExists(tbID.Text.ToString()))
-            {
-                isSearching = true;
-                dtInvoiceDate.Enabled = false;
-                tbM1.Enabled = false;
-                tbM1P.Enabled = false;
-                tbM2.Enabled = false;
-                tbM2P.Enabled = false;
-                tbM3.Enabled = false;
-                tbM3P.Enabled = false;
-                tbM4.Enabled = false;
-                tbM4P.Enabled = false;
-                tbM5.Enabled = false;
-                tbM5P.Enabled = false;
-                tbM6.Enabled = false;
-                tbM6P.Enabled = false;
-                tbPrice.Enabled = false;
-                searchForID(tbID.Text.ToString());
-                labelPaid.Text = "Add Payment";
-                btnAdd.Text = "Update";
-            }
-        }
-
-        private bool doesIDExists(String searchString)
-        {
-            bool doesExist = false;
-
-            //check if connection is closed, if so open it
-            if (con.State != ConnectionState.Open)
-            {
-                con.Open();
-            }
-
-
-            try
-            {
-                //create search query string
-                string query = "SELECT * FROM NewInvoices where ID = @ID;";
-
-                //create an object SqlCommand that will take the query and the connection string
-                SqlCommand cmd = new SqlCommand(query, con);
-
-                cmd.Parameters.AddWithValue("@ID", searchString);
-
-
-                //create a data reader that will execute the query
-                SqlDataReader dr = cmd.ExecuteReader();
-
-                //if the data reader finds the row, do this
-                if (dr.Read())
-                {
-                    doesExist = true;
-                }
-            }
-            catch (Exception msg)
-            {
-                MessageBox.Show("An error has occured! Please try again");
-            }
-
-
-
-            //close the connection if it is still open
-            if (con.State == ConnectionState.Open)
-            {
-                con.Close();
-            }
-
-            return doesExist;
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             resetText();
         }
         private void resetText()
         {
-            labelPaid.Text = "Paid";
+            tbDiscount.Text = "0";
             btnAdd.Text = "Add";
             tbM1.Text = "";
             tbM1.setPlaceholder();
@@ -355,52 +173,62 @@ namespace Construction
             tbM6P.Text = "";
             tbM6P.setPlaceholder();
             tbM6P.isPlaceHolder = true;
+            tbM7.Text = "";
+            tbM7.setPlaceholder();
+            tbM7.isPlaceHolder = true;
+            tbM7P.Text = "";
+            tbM7P.setPlaceholder();
+            tbM7P.isPlaceHolder = true;
+            tbM8.Text = "";
+            tbM8.setPlaceholder();
+            tbM8.isPlaceHolder = true;
+            tbM8P.Text = "";
+            tbM8P.setPlaceholder();
+            tbM8P.isPlaceHolder = true;
+            tbM9.Text = "";
+            tbM9.setPlaceholder();
+            tbM9.isPlaceHolder = true;
+            tbM9P.Text = "";
+            tbM9P.setPlaceholder();
+            tbM9P.isPlaceHolder = true;
+            tbM10.Text = "";
+            tbM10.setPlaceholder();
+            tbM10.isPlaceHolder = true;
+            tbM10P.Text = "";
+            tbM10P.setPlaceholder();
+            tbM10P.isPlaceHolder = true;
 
-            tbPrice.Text = "";
-            tbPaid.Text = "";
+            tbPrice.Text = "0";
+            tbTotal.Text = "0";
             tbID.Text = "";
             tbCompanyName.Text = "";
             dtInvoiceDate.Value = DateTime.Now;
             isSearching = false;
-            dtInvoiceDate.Enabled = true;
-            tbM1.Enabled = true;
-            tbM1P.Enabled = true;
-            tbM2.Enabled = true;
-            tbM2P.Enabled = true;
-            tbM3.Enabled = true;
-            tbM3P.Enabled = true;
-            tbM4.Enabled = true;
-            tbM4P.Enabled = true;
-            tbM5.Enabled = true;
-            tbM5P.Enabled = true;
-            tbM6.Enabled = true;
-            tbM6P.Enabled = true;
-            tbPrice.Enabled = true;
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            //check, please god just check
 
             //check if some textboxes are empty
             if (tbID.Text.ToString().Length == 0 || tbCompanyName.Text.ToString().Length == 0
-                || dtInvoiceDate.Text.ToString().Length == 0 || tbPrice.Text.ToString().Length == 0
-                || tbPaid.Text.ToString().Length == 0)
+                || dtInvoiceDate.Text.ToString().Length == 0 || tbPrice.Text.ToString().Length == 0)
             {
-                MessageBox.Show("Please make sure all textboxes are filled in!");
+                MessageBox.Show("Please make sure all textboxes are filled in!", "Error!");
                 return;
             }
 
+            //apostrophes and quotations crash the app
             if (tbCompanyName.Text.ToString().Contains("\"") || tbCompanyName.Text.ToString().Contains("\'"))
             {
-                MessageBox.Show("Please note that the Company Name textbox should not contain any apostrophes (\') or quotations (\")!");
+                MessageBox.Show("Please note that the Company Name textbox should not contain any apostrophes (\') or quotations (\")!", "Error!");
                 return;
             }
 
             double z = 0, y = 0;
 
             String ID = tbID.Text.ToString(), companyName = tbCompanyName.Text.ToString();
-            DateTime dt = dtInvoiceDate.Value;
+            DateTime dt1 = new DateTime(dtInvoiceDate.Value.Year, dtInvoiceDate.Value.Month, dtInvoiceDate.Value.Day, DateTime.Now.Hour, DateTime.Now.Minute + 1, DateTime.Now.Second);
+            String dt = dt1.ToString("yyyy-MM-dd HH:mm:ss");
             String x = tbM1.Text.ToString();
             double M1 = 0, M1P = 0;
             double M2 = 0, M2P = 0;
@@ -408,124 +236,120 @@ namespace Construction
             double M4 = 0, M4P = 0;
             double M5 = 0, M5P = 0;
             double M6 = 0, M6P = 0;
-            double total = 0, paid = 0, toPay = 0;
-            //this should be double.tryparse, inout string error occurs here
+            double M7 = 0, M7P = 0;
+            double M8 = 0, M8P = 0;
+            double M9 = 0, M9P = 0;
+            double M10 = 0, M10P = 0;
+            double total = 0, discount = 0, price = 0;
+            //this shoul9d be double.tryparse, inout string error occurs here
+            if(con.State == ConnectionState.Closed)
+                con.Open();
             try
             {
                 if (!string.IsNullOrEmpty(tbM1.Text))
-                    M1 = Convert.ToDouble(tbM1.Text);
+                    Double.TryParse(tbM1.Text, out M1);
+                if (!string.IsNullOrEmpty(tbM1P.Text))
+                    Double.TryParse(tbM1P.Text, out M1P);
 
                 if (!string.IsNullOrEmpty(tbM2.Text))
-                    M2 = Convert.ToDouble(tbM2.Text);
+                    Double.TryParse(tbM2.Text, out M2);
+                if (!string.IsNullOrEmpty(tbM2P.Text))
+                    Double.TryParse(tbM2P.Text, out M2P);
 
                 if (!string.IsNullOrEmpty(tbM3.Text))
-                    M3 = Convert.ToDouble(tbM3.Text);
+                    Double.TryParse(tbM3.Text, out M3);
+                if (!string.IsNullOrEmpty(tbM3P.Text))
+                    Double.TryParse(tbM3P.Text, out M3P);
 
                 if (!string.IsNullOrEmpty(tbM4.Text))
-                    M4 = Convert.ToDouble(tbM4.Text);
+                    Double.TryParse(tbM4.Text, out M4);
+                if (!string.IsNullOrEmpty(tbM4P.Text))
+                    Double.TryParse(tbM4P.Text, out M4P);
 
                 if (!string.IsNullOrEmpty(tbM5.Text))
-                    M5 = Convert.ToDouble(tbM5.Text);
+                    Double.TryParse(tbM5.Text, out M5);
+                if (!string.IsNullOrEmpty(tbM5P.Text))
+                    Double.TryParse(tbM5P.Text, out M5P);
 
                 if (!string.IsNullOrEmpty(tbM6.Text))
-                    M6 = Convert.ToDouble(tbM6.Text);
-                //same here
-                total = Double.Parse(tbPrice.Text.ToString());
-                paid = Double.Parse(tbPaid.Text.ToString());
+                    Double.TryParse(tbM6.Text, out M6);
+                if (!string.IsNullOrEmpty(tbM6P.Text))
+                    Double.TryParse(tbM6P.Text, out M6P);
 
+                if (!string.IsNullOrEmpty(tbM7.Text))
+                    Double.TryParse(tbM7.Text, out M7);
+                if (!string.IsNullOrEmpty(tbM7P.Text))
+                    Double.TryParse(tbM7P.Text, out M7P);
 
-                if (total < 0 || paid < 0 || M1 < 0 || M1P < 0 || M2 < 0 || M2P < 0 || M3 < 0 || M3P < 0 || M4 < 0 || M4P < 0 || M5 < 0 || M5P < 0 || M6 < 0 || M6P < 0)
+                if (!string.IsNullOrEmpty(tbM8.Text))
+                    Double.TryParse(tbM8.Text, out M8);
+                if (!string.IsNullOrEmpty(tbM8P.Text))
+                    Double.TryParse(tbM8P.Text, out M8P);
+
+                if (!string.IsNullOrEmpty(tbM9.Text))
+                    Double.TryParse(tbM9.Text, out M9);
+                if (!string.IsNullOrEmpty(tbM9P.Text))
+                    Double.TryParse(tbM9P.Text, out M9P);
+
+                if (!string.IsNullOrEmpty(tbM10.Text))
+                    Double.TryParse(tbM10.Text, out M10);
+                if (!string.IsNullOrEmpty(tbM10P.Text))
+                    Double.TryParse(tbM10P.Text, out M10P);
+
+                if (!string.IsNullOrEmpty(tbPrice.Text))
+                    Double.TryParse(tbPrice.Text, out price);
+
+                if (!string.IsNullOrEmpty(tbPrice.Text))
+                    Double.TryParse(tbPrice.Text, out price);
+
+                if (!string.IsNullOrEmpty(tbDiscount.Text))
                 {
-                    MessageBox.Show("The price and/or the payment should not be less than 0!");
+                    Double.TryParse(tbDiscount.Text, out discount);
+
+                }
+
+                if (!string.IsNullOrEmpty(tbTotal.Text))
+                    Double.TryParse(tbTotal.Text, out total);
+                //same here
+
+                //Negative NUmbers are banned, but just in case
+                if (M1 < 0 || M1P < 0 || M2 < 0 || M2P < 0 || M3 < 0 || M3P < 0 || M4 < 0 || M4P < 0 || M5 < 0 || M5P < 0 || M6 < 0 || M6P < 0
+                    || M7 < 0 || M7P < 0 || M8 < 0 || M8P < 0 || M9 < 0 || M9P < 0 || M10 < 0 || M10P < 0 || discount < 0)
+                {
+                    MessageBox.Show("Please make sure none of the textboxes have negative numbers in them!", "Error!");
+                    con.Close();
                     return;
                 }
 
             }
             catch (Exception msg)
             {
-                MessageBox.Show("Please make sure the Materials, Price, and Paid have only numbers in them");
+                MessageBox.Show("Please make sure the Materials, Price, and Paid have only numbers in them", "Error!");
+                con.Close();
                 return;
             }
 
-            if (paid > total || toPay > total)
+            bool hasCounted = false;
+            //check if connection is closed, if so open it
+            con.Close();
+            if (con.State != ConnectionState.Open)
             {
-                MessageBox.Show("Paid or To Pay cannot be bigger than total! Please fix this");
-                return;
+                con.Open();
             }
 
-            if (doesIDExists(tbID.Text.ToString()))
-            {
-                //check if connection is closed, if so open it
-                if (con.State != ConnectionState.Open)
-                {
-                    con.Open();
-                }
-                try
-                {
-                    //update sales
-                    globalPaid = globalPaid + paid;
-                    toPay = Double.Parse(tbPrice.Text.ToString()) - globalPaid;
-
-                    if (paid > total || globalPaid + toPay > total || paid + toPay > total)
-                    {
-                        MessageBox.Show("The payment you are adding should not exceed the total!");
-                        return;
-                    }
-                    if (globalPaid > total)
-                    {
-                        MessageBox.Show("The amount being paid cannot exceed the total that needs to be paid!");
-                        return;
-                    }
-                    String query1 = "Update NewInvoices set CompanyName = @CompanyName, Paid = @Paid, ToPay = @ToPay where ID = @ID";
-                    SqlCommand cmd = new SqlCommand(query1, con);
-                    cmd.Parameters.AddWithValue("@CompanyName", companyName);
-                    cmd.Parameters.AddWithValue("@Paid", globalPaid);
-                    cmd.Parameters.AddWithValue("@ToPay", toPay);
-                    cmd.Parameters.AddWithValue("@ID", ID);
-
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Invoice " + ID + " has been updated with the following information:"
-                        + "\nAmount Added: " + paid + "\nTotal Amount Paid: " + globalPaid + "\nAmount To Pay: " + toPay + "\nTotal: " + total);
-                    resetText();
-
-                    Form parentForm = this.ParentForm;
-                    // Check if the parent form is not null and is of the correct type
-                    if (parentForm != null && parentForm is Invoices)
-                    {
-                        // Cast the parent form to the correct type
-                        Invoices myParentForm = (Invoices)parentForm;
-
-                        // Call the public method on the parent form
-                        myParentForm.loadData();
-                    }
-
-
-                }
-                catch (Exception msg)
-                {
-                    MessageBox.Show("An Error has occured! Please make sure everything is correct");
-                }
-
-            }
-            else
-            {
-                bool hasCounted = false;
-                toPay = total - paid;
-                //check if connection is closed, if so open it
-                if (con.State != ConnectionState.Open)
-                {
-                    con.Open();
-                }
+            using (var trans = con.BeginTransaction()) {
                 try
                 {
 
-                    for (int i = 0; i < 6; i++)
+                    for (int i = 0; i < 10; i++)
                     {
                         //If weight is filled, price should be filled too otherwise give error
                         if ((tbArray[i, 0].Text.ToString().Length != 0 && tbArray[i, 1].Text.ToString().Length == 0) ||
                             (tbArray[i, 0].Text.ToString().Length == 0 && tbArray[i, 1].Text.ToString().Length != 0))
                         {
-                            MessageBox.Show("Please sure you have filled in the boxes for " + labels[i] + " correctly!");
+                            MessageBox.Show("Please sure you have filled in the boxes for " + labels[i].Text + " correctly!", "Error!");
+                            trans.Rollback();
+                            con.Close();
                             return;
                         }
 
@@ -538,7 +362,9 @@ namespace Construction
                             }
                             else
                             {
-                                MessageBox.Show("Please make sure to fill in the information correctly for " + labels[i]);
+                                MessageBox.Show("Please make sure to fill in the information correctly for " + labels[i].Text, "Error!");
+                                trans.Rollback();
+                                con.Close();
                                 return;
                             }
                         }
@@ -550,30 +376,29 @@ namespace Construction
                     }
 
                     if (M1 == 0 && M1P == 0 && M2 == 0 && M2P == 0 && M3 == 0 && M3P == 0 && M4 == 0 && M4P == 0 &&
-                        M5 == 0 && M5P == 0 && M6 == 0 && M6P == 0)
+                        M5 == 0 && M5P == 0 && M6 == 0 && M6P == 0 && M7 == 0 && M7P == 0 && M8 == 0 && M8P == 0 && M9 == 0 && M9P == 0 && M10 == 0
+                        && M10P == 0)
                     {
-                        MessageBox.Show("Please fill in at least 1 material");
-                        return;
-                    }
-
-                    if (globalPaid > total)
-                    {
-                        MessageBox.Show("This Invoice has already been fully paid!");
+                        MessageBox.Show("Please fill in at least 1 material", "Error!");
+                        trans.Rollback();
+                        con.Close();
                         return;
                     }
 
                     //Add invoice
+                    
                     String query1 = "INSERT INTO NewInvoices VALUES(@ID, @CompanyName,@DateInv, @Total, @ToPay, @Paid);";
-                    SqlCommand cmd = new SqlCommand(query1, con);
+                    SQLiteCommand cmd = new SQLiteCommand(query1, con);
                     cmd.Parameters.AddWithValue("@ID", ID);
                     cmd.Parameters.AddWithValue("@CompanyName", companyName);
                     cmd.Parameters.AddWithValue("@DateInv", dt);
                     cmd.Parameters.AddWithValue("@Total", total);
-                    cmd.Parameters.AddWithValue("@ToPay", toPay);
-                    cmd.Parameters.AddWithValue("@Paid", paid);
+                    cmd.Parameters.AddWithValue("@ToPay", total);
+                    cmd.Parameters.AddWithValue("@Paid", 0);
                     cmd.ExecuteNonQuery();
 
-                    for (int i = 0; i < 6; i++)
+
+                    for (int i = 0; i < 10; i++)
                     {
                         //if field is not empty, that means this field should be inserted
                         //We already made sure that the field next to it has a number (Hopefully!)
@@ -598,29 +423,45 @@ namespace Construction
                                     materialName = "Gravier 0/5";
                                     break;
                                 case 3:
+                                    materialID = 13;
+                                    materialName = "Gravier 0/6";
+                                    break;
+                                case 4:
+                                    materialID = 14;
+                                    materialName = "Gravier 0/8";
+                                    break;
+                                case 5:
                                     materialID = 4;
                                     materialName = "Gravier 5/15";
                                     break;
-                                case 4:
+                                case 6:
+                                    materialID = 6;
+                                    materialName = "Ciment";
+                                    break;
+                                case 7:
+                                    materialID = 16;
+                                    materialName = "Ciment Blanc";
+                                    break;
+                                case 8:
+                                    materialID = 15;
+                                    materialName = "Colorant";
+                                    break;
+                                case 9:
                                     materialID = 5;
                                     materialName = "Sable";
-                                    break;
-                                case 5:
-                                    materialID = 6;
-                                    materialName = "Cement";
                                     break;
 
                             }
 
                             String query2 = "UPDATE Materials Set Weight_Quantity = Weight_Quantity + @Quantity WHERE ID = @ID";
-                            SqlCommand cmd2 = new SqlCommand(query2, con);
+                            SQLiteCommand cmd2 = new SQLiteCommand(query2, con);
                             cmd2.Parameters.AddWithValue("@Quantity", z);
                             cmd2.Parameters.AddWithValue("@ID", materialID);
                             cmd2.ExecuteNonQuery();
 
                             String query3 = "INSERT INTO MaterialsRecords (Description, Amount, Type, DateTime) " +
                                 " VALUES (@Description, @Amount, @Type, @DateTime)";
-                            SqlCommand cmd3 = new SqlCommand(query3, con);
+                            SQLiteCommand cmd3 = new SQLiteCommand(query3, con);
                             cmd3.Parameters.AddWithValue("@Description", materialName);
                             cmd3.Parameters.AddWithValue("@Amount", z);
                             cmd3.Parameters.AddWithValue("@Type", "+");
@@ -628,36 +469,256 @@ namespace Construction
                             cmd3.ExecuteNonQuery();
 
                             String query4 = "INSERT INTO NewInvoicesDetails VALUES (@ID, @MaterialID, @Quantity, @Price)";
-                            SqlCommand cmd4 = new SqlCommand(query4, con);
+                            SQLiteCommand cmd4 = new SQLiteCommand(query4, con);
                             cmd4.Parameters.AddWithValue("@ID", ID);
                             cmd4.Parameters.AddWithValue("@MaterialID", materialID);
                             cmd4.Parameters.AddWithValue("@Quantity", z);
                             cmd4.Parameters.AddWithValue("@Price", y);
                             cmd4.ExecuteNonQuery();
-
                         }
                     }
 
+                    
+
+
+                    //check if company exists in database
+                    String query5 = "SELECT * FROM Company WHERE CompanyName = @CompanyName";
+                    SQLiteCommand cmd5 = new SQLiteCommand(query5, con);
+                    cmd5.Parameters.AddWithValue("@CompanyName", companyName);
+                    SQLiteDataReader dr = cmd5.ExecuteReader();
+                    if (dr.Read())
+                    {
+                        //update cumulative owed
+                    }
+                    else
+                    {
+                        dr.Close();
+                        dr.Dispose();
+                        String query6 = "INSERT INTO Company VALUES (@CompanyName, 0, 0)";
+                        SQLiteCommand cmd6 = new SQLiteCommand(query6, con);
+                        cmd6.Parameters.AddWithValue("@CompanyName", companyName);
+                        cmd6.ExecuteNonQuery();
+                    }
+
+                    if(!dr.IsClosed)
+                        dr.Close();
+                    String query7 = "INSERT INTO PaymentHistory (ID, PayDate, ToPay, Paid, CumulativeTotal, CompanyName) VALUES (@ID, @PayDate, @ToPay, @Paid, IFNULL((SELECT CumulativeTotal FROM PaymentHistory WHERE CompanyName like @CompanyName ORDER BY PayDate DESC LIMIT 1), 0) + @Total, @CompanyName)";
+                    SQLiteCommand cmd7 = new SQLiteCommand(query7, con);
+                    cmd7.Parameters.AddWithValue("@ID", ID);
+                    cmd7.Parameters.AddWithValue("@PayDate", dt);
+                    cmd7.Parameters.AddWithValue("@ToPay", total);
+                    cmd7.Parameters.AddWithValue("@Paid", 0);
+                    cmd7.Parameters.AddWithValue("@Total", total);
+                    cmd7.Parameters.AddWithValue("@CompanyName", companyName);
+                    cmd7.ExecuteNonQuery();
+
+                    string query8 = "UPDATE Company SET CumulativeOwed = (SELECT CumulativeTotal FROM PaymentHistory WHERE CompanyName = @CompanyNames ORDER BY CompanyName DESC LIMIT 1) WHERE CompanyName = @CompanyNames;";
+                    SQLiteCommand cmd8 = new SQLiteCommand(query8, con);
+                    cmd8.Parameters.AddWithValue("@CompanyNames", companyName);
+                    cmd8.ExecuteNonQuery();
+
+                    trans.Commit();
+
+                    loadDataOntoCombo();
+                    Invoices.Instance.loadAutoCompleteData();
+                    ucInvoicePayment.Instance.loadData();
+                    ucInvoicePayment.Instance.loadDataOntoCombo();
+
                     MessageBox.Show("Invoice of ID " + ID + " has been added with the following information:"
-                        + "\nAmount Paid: " + paid + "\nAmount To Pay: " + toPay + "\nTotal: " + total);
+                        + "\nTotal: " + total + "\nBuyer Name: " + companyName);
                     resetText();
 
+
+                    con.Close();
+
                     Form parentForm = this.ParentForm;
-                    // Check if the parent form is not null and is of the correct type
+                    //check if the parent form is not null and is of the correct type
                     if (parentForm != null && parentForm is Invoices)
                     {
-                        // Cast the parent form to the correct type
+                        //caast the parent form to the correct type
                         Invoices myParentForm = (Invoices)parentForm;
 
-                        // Call the public method on the parent form
+                        //call the public method on the parent form
                         myParentForm.loadData();
                     }
 
                 }
                 catch (Exception msg)
                 {
-                    MessageBox.Show("An Error has occured! Please make sure everything is correct");
+                    MessageBox.Show("An Error has occured! Please make sure everything is correct", "Error!");
+                    trans.Rollback();
+                    con.Close();
+                    return;
                 }
+            }
+
+            //close the connection if it is still open
+            if (con.State == ConnectionState.Open)
+            {
+                con.Close();
+            }
+
+        }
+        private void tbM1P_Leave(object sender, EventArgs e)
+        {
+
+            calculateTotal();
+
+        }
+
+        private void tbDiscount_Leave(object sender, EventArgs e)
+        {
+
+            calculateTotal();
+        }
+
+        private void calculateTotal()
+        {
+            double total = 0, number = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                try
+                {
+                    if (tbArray[i, 1].Text.Length != 0)
+                    {
+                        if (double.TryParse(tbArray[i, 1].Text.ToString(), out number))
+                        {
+                            total = total + number;
+                        }
+                    }
+                }
+                catch (Exception msg)
+                {
+                    MessageBox.Show("You're not supposed to see this");
+                }
+            }
+            tbPrice.Text = total.ToString();
+
+            if (tbDiscount.Text.ToString().Length != 0)
+            {
+                globalDiscount = 0;
+                String mystr = tbDiscount.Text.ToString();
+                double tempDiscount = 0, tempPrice = 0;
+                if (mystr.EndsWith("%"))
+                {
+                    mystr = mystr.TrimEnd('%');
+                    if (double.TryParse(mystr, out tempDiscount))
+                    {
+                        if(tempDiscount > 100)
+                        {
+                            MessageBox.Show("Please change the discount, it cannot be over 100%!");
+                            tbDiscount.Text = "0";
+                            tbTotal.Text = tbPrice.Text;
+                        }
+                        tempDiscount = tempDiscount / 100;
+                        globalDiscount = tempDiscount;
+                        if (double.TryParse(tbPrice.Text.ToString(), out tempPrice))
+                        {
+                            tbTotal.Text = (tempPrice - (globalDiscount * tempPrice)).ToString();
+                        }
+                    }
+
+                }
+                else if (mystr.StartsWith("%"))
+                {
+                    mystr = mystr.TrimStart('%');
+                    if (double.TryParse(mystr, out tempDiscount))
+                    {
+                        if (tempDiscount > 100)
+                        {
+                            MessageBox.Show("Please change the discount, it cannot be over 100%!");
+                            tbDiscount.Text = "0";
+                            tbTotal.Text = tbPrice.Text;
+                        }
+                        tempDiscount = tempDiscount / 100;
+                        globalDiscount = tempDiscount;
+                        if (double.TryParse(tbPrice.Text.ToString(), out tempPrice))
+                        {
+                            tbTotal.Text = (tempPrice - (globalDiscount * tempPrice)).ToString();
+                        }
+                    }
+                }
+                else if (double.TryParse(mystr, out tempDiscount))
+                {
+                    globalDiscount = tempDiscount;
+                    if (double.TryParse(tbPrice.Text.ToString(), out tempPrice))
+                    {
+                        if(tempPrice < tempDiscount)
+                        {
+                            MessageBox.Show("Please change the discount, it cannot be higher than the price!");
+                            tbDiscount.Text = "0";
+                            tbTotal.Text = tbPrice.Text;
+                        }
+                        else
+                            tbTotal.Text = (tempPrice - globalDiscount).ToString();
+                    }
+                }
+            }
+            else
+            {
+                tbDiscount.Text = "0";
+            }
+
+        }
+
+        private void tbM2P_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.') && (e.KeyChar != '%'))
+            {
+                e.Handled = true;
+            }
+
+            //only allow one decimal point
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            {
+                e.Handled = true;
+            }
+            PlaceholderTextBox x;
+            try
+            {
+                x = (PlaceholderTextBox)sender;
+                if ((e.KeyChar == '%'))
+                {
+                    e.Handled = true;
+                }
+            }
+            catch(Exception msg)
+            {
+                if ((e.KeyChar == '%') && ((sender as TextBox).Text.IndexOf('%') > -1))
+                {
+                    e.Handled = true;
+                }
+            }
+
+        }
+
+        private void tbCompanyName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\'' || e.KeyChar == '\"')
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void tbDiscount_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.V)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void tbM2P_TextChanged(object sender, EventArgs e)
+        {
+            calculateTotal();
+        }
+
+        private void tbCompanyName_KeyPress_1(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\"' || e.KeyChar == '\'')
+            {
+                e.Handled = true;
             }
         }
     }

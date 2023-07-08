@@ -8,13 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Data.SQLite;
+using System.IO;
 
 namespace Construction
 {
     public partial class Login : Form
     {
         //Connection String of the Application
-        SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ToString());
+        //SqlConnection con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ToString());
+        SQLiteConnection con2 = new SQLiteConnection("Data Source=constructionSQLITE.db;Version=3;New=True;Compress=True;", true);
         public Login()
         {
             InitializeComponent();
@@ -44,22 +47,24 @@ namespace Construction
         {
             //initialize variables using the values from the textboxes
             string username = tbUsername.Text;
-            string password = tbPassword.Text;
+            string password = tbPassword.Text; 
 
 
             //check if connection is closed, if so open it
-            if (con.State != ConnectionState.Open)
+            if (con2.State != ConnectionState.Open)
             {
-                con.Open();
+                con2.Open();
             }
 
             try
             {
+                
                 //create search query string
                 string query = "SELECT * FROM Users WHERE Username = @username AND Password = @password";
 
                 //create an object SqlCommand that will take the query and the connection string
-                SqlCommand cmd = new SqlCommand(query, con);
+                //SqlCommand cmd = new SqlCommand(query, con);
+                SQLiteCommand cmd = new SQLiteCommand(query, con2);
 
                 //explain what the parameters with @ in the conenction string mean
                 cmd.Parameters.AddWithValue("@username", username);
@@ -67,7 +72,7 @@ namespace Construction
 
 
                 //create a data reader that will execute the query
-                SqlDataReader dr = cmd.ExecuteReader();
+                SQLiteDataReader dr = cmd.ExecuteReader();
 
                 //if the data reader finds the row, do this
                 if (dr.Read())
@@ -82,22 +87,26 @@ namespace Construction
 
                 else
                 {
-                    MessageBox.Show("Invalid Username or Password!");
+                    MessageBox.Show("Invalid Username or Password!", "Unsuccessful operation");
 
                 }
+
+
+                dr.Close();
+                dr.Dispose();
 
             }
             catch(Exception msg)
             {
-                MessageBox.Show("An error has occured! Please try again");
+                MessageBox.Show("An error has occured! Please try again", "Error!");
             }
 
             
 
             //close the connection if it is still open
-            if (con.State == ConnectionState.Open)
+            if (con2.State == ConnectionState.Open)
             {
-                con.Close();
+                con2.Close();
             }
 
         }
@@ -126,6 +135,12 @@ namespace Construction
         private void Login_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void Login_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            ucSettings.Instance.backupData();
+            Application.Exit();
         }
     }
 }

@@ -21,6 +21,9 @@ namespace Construction
         public Payments()
         {
             InitializeComponent();
+            DateTime newFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 01, 00, 00, 00);
+            dtPickerFrom.Value = newFrom;
+            dtPickerTo.Value = DateTime.Now;
             loadData();
 
         }

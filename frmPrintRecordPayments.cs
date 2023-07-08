@@ -29,7 +29,7 @@ namespace Construction
         {
             isSale = _isSale;
         }
-        
+
         public frmPrintRecordPayments()
         {
             InitializeComponent();
@@ -93,11 +93,11 @@ namespace Construction
             String query = "";
             if (isSale == true)
             {
-                query = "SELECT ID, PayDate, ToPay, Paid, CumulativeTotal FROM SaleHistory WHERE CompanyName like '" + CompanyName + "' AND PayDate BETWEEN '" + dtFrom.ToString("yyyy-MM-dd HH:mm:ss") + "' AND '" + dtTo.ToString("yyyy-MM-dd HH:mm:ss") + "' ORDER BY PayDate ASC, ToPay DESC, CumulativeTotal DESC LIMIT " + limit +";";
+                query = "SELECT ID, PayDate, ToPay, Paid, CumulativeTotal FROM SaleHistory WHERE CompanyName like '" + CompanyName + "' AND PayDate BETWEEN '" + dtFrom.ToString("yyyy-MM-dd HH:mm:ss") + "' AND '" + dtTo.ToString("yyyy-MM-dd HH:mm:ss") + "' ORDER BY PayDate ASC, ToPay DESC, CumulativeTotal DESC LIMIT " + limit + ";";
             }
             else
             {
-                query = "SELECT ID, PayDate, ToPay, Paid, CumulativeTotal FROM PaymentHistory WHERE CompanyName like '" + CompanyName + "' AND PayDate BETWEEN '" + dtFrom.ToString("yyyy-MM-dd HH:mm:ss") + "' AND '" + dtTo.ToString("yyyy-MM-dd HH:mm:ss") + "' ORDER BY PayDate ASC, ToPay DESC, CumulativeTotal DESC LIMIT " + limit +";";
+                query = "SELECT ID, PayDate, ToPay, Paid, CumulativeTotal FROM PaymentHistory WHERE CompanyName like '" + CompanyName + "' AND PayDate BETWEEN '" + dtFrom.ToString("yyyy-MM-dd HH:mm:ss") + "' AND '" + dtTo.ToString("yyyy-MM-dd HH:mm:ss") + "' ORDER BY PayDate ASC, ToPay DESC, CumulativeTotal DESC LIMIT " + limit + ";";
             }
             SQLiteDataAdapter adapter = new SQLiteDataAdapter(query, con);
             DataTable dt = new DataTable();
@@ -121,7 +121,7 @@ namespace Construction
 
             sold = debit - credit;
 
-            labelDebit.Text = "F.CFA "+debit.ToString("#,##0.00");
+            labelDebit.Text = "F.CFA " + debit.ToString("#,##0.00");
             labelCredit.Text = "F.CFA " + credit.ToString("#,##0.00");
             labelSold.Text = "F.CFA " + sold.ToString("#,##0.00");
             //close the connection if it is still open
@@ -228,12 +228,12 @@ namespace Construction
             {
                 printDocument.Print();
             }
-            catch(Exception msg)
+            catch (Exception msg)
             {
                 //dont do anything
             }
             this.Close();
-            
+
             //Insert into history
             //check if connection is closed, if so open i
             if (con.State != ConnectionState.Open)

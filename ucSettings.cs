@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace Construction
 {
@@ -100,12 +101,11 @@ namespace Construction
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
+            this.Parent.Parent.Hide();
             //create the login page
             Login toPage = new Login();
             //show the homepage
             toPage.Show();
-            //hide the current page
-            this.Hide();
         }
 
         private void btnHomepage_Click(object sender, EventArgs e)
@@ -211,6 +211,181 @@ namespace Construction
                     con.Close();
 
             }
+        }
+
+        private void btnChangePassword_Click(object sender, EventArgs e)
+        {
+            bool myBool = false;
+            if (btnChangePassword.Text.ToString().Equals("Change"))
+            {
+                btnChangePassword.Text = "Cancel";
+                myBool = true;
+            }
+            else if (btnChangePassword.Text.ToString().Equals("Cancel"))
+            {
+                btnChangePassword.Text = "Change";
+                myBool = false;
+            }
+            tbOld.ReadOnly = !myBool;
+            tbNew.ReadOnly = !myBool;
+            btnConfirm.Enabled = myBool;
+            cbShowNew.Enabled = myBool;
+            cbShowOld.Enabled = myBool;
+        }
+
+        private void cbShowOld_CheckedChanged(object sender, EventArgs e)
+        {
+            //if the checkbox for show password is not checked, remove the stars
+            if (cbShowOld.Checked)
+            {
+                tbOld.PasswordChar = '\0';
+            }
+            //if the checkbox for show password is checked, change its text to stars
+            else
+            {
+                tbOld.PasswordChar = '*';
+            }
+        }
+
+        private void cbShowNew_CheckedChanged(object sender, EventArgs e)
+        {
+            //if the checkbox for show password is not checked, remove the stars
+            if (cbShowNew.Checked)
+            {
+                tbNew.PasswordChar = '\0';
+            }
+            //if the checkbox for show password is checked, change its text to stars
+            else
+            {
+                tbNew.PasswordChar = '*';
+            }
+        }
+
+        private void btnConfirm_Click(object sender, EventArgs e)
+        {
+            String oldPassword = tbOld.Text.ToString().Trim();
+            String newPassword = tbNew.Text.ToString().Trim();
+            if(newPassword.Length == 0)
+            {
+                MessageBox.Show("Please enter a valid password!");
+                return;
+            }
+            // confirm that old password is the same as the current one
+            if (!confirmPassword(oldPassword))
+            {
+                MessageBox.Show("Incorrect Password!");
+                return;
+            }
+
+            if(updatePassword(newPassword))
+            {
+                bool myBool = false;
+                tbOld.ReadOnly = !myBool;
+                tbNew.ReadOnly = !myBool;
+                btnConfirm.Enabled = myBool;
+                cbShowNew.Enabled = myBool;
+                cbShowOld.Enabled = myBool;
+                tbOld.Text = "";
+                tbNew.Text = "";
+                MessageBox.Show("Password Successfully Changed!");
+                btnChangePassword.Text = "Change";
+            }
+
+
+        }
+
+        private bool confirmPassword(String oldPassword)
+        {
+
+            //check if connection is closed, if so open it
+            if (con.State != ConnectionState.Open)
+            {
+                con.Open();
+            }
+
+            try
+            {
+
+                //create search query string
+                string query = "SELECT * FROM Users WHERE Password = @password";
+
+                //create an object SqlCommand that will take the query and the connection string
+                //SqlCommand cmd = new SqlCommand(query, con);
+                SQLiteCommand cmd = new SQLiteCommand(query, con);
+
+                //explain what the parameters with @ in the conenction string mean
+                cmd.Parameters.AddWithValue("@password", oldPassword);
+
+
+                //create a data reader that will execute the query
+                SQLiteDataReader dr = cmd.ExecuteReader();
+
+                //if the data reader finds the row, do this
+                if (dr.Read())
+                {
+                    return true;
+                }
+
+
+                dr.Close();
+                dr.Dispose();
+
+            }
+            catch (Exception msg)
+            {
+                MessageBox.Show("An error has occured! Please try again", "Error!");
+            }
+
+
+
+            //close the connection if it is still open
+            if (con.State == ConnectionState.Open)
+            {
+                con.Close();
+            }
+
+            return false;
+        }
+
+        private bool updatePassword (String newPassword)
+        {
+
+            //check if connection is closed, if so open it
+            if (con.State != ConnectionState.Open)
+            {
+                con.Open();
+            }
+
+            try
+            {
+
+                //create search query string\
+                string query = "UPDATE Users SET Password = @password WHERE Username = @username;";
+
+                //create an object SqlCommand that will take the query and the connection string
+                //SqlCommand cmd = new SqlCommand(query, con);
+                SQLiteCommand cmd = new SQLiteCommand(query, con);
+
+                //explain what the parameters with @ in the conenction string mean
+                cmd.Parameters.AddWithValue("@password", newPassword);
+                cmd.Parameters.AddWithValue("@username", "admin");
+
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception msg)
+            {
+                MessageBox.Show("An error has occured! Please try again", "Error!");
+            }
+
+
+
+            //close the connection if it is still open
+            if (con.State == ConnectionState.Open)
+            {
+                con.Close();
+            }
+            return false;
         }
     }
 }

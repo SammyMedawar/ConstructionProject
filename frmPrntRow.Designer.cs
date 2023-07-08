@@ -54,10 +54,8 @@
             this.label10 = new System.Windows.Forms.Label();
             this.labelBalance = new System.Windows.Forms.Label();
             this.panelPrint = new System.Windows.Forms.Panel();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
             this.panelPrint.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // btnCancel
@@ -131,6 +129,7 @@
             // labelDate
             // 
             this.labelDate.AutoSize = true;
+            this.labelDate.BackColor = System.Drawing.Color.Transparent;
             this.labelDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelDate.Location = new System.Drawing.Point(188, 208);
             this.labelDate.Name = "labelDate";
@@ -151,6 +150,7 @@
             // labelFrom
             // 
             this.labelFrom.AutoSize = true;
+            this.labelFrom.BackColor = System.Drawing.Color.Transparent;
             this.labelFrom.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelFrom.Location = new System.Drawing.Point(188, 257);
             this.labelFrom.Name = "labelFrom";
@@ -171,6 +171,7 @@
             // labelTo
             // 
             this.labelTo.AutoSize = true;
+            this.labelTo.BackColor = System.Drawing.Color.Transparent;
             this.labelTo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTo.Location = new System.Drawing.Point(188, 303);
             this.labelTo.Name = "labelTo";
@@ -191,6 +192,7 @@
             // labelPaid
             // 
             this.labelPaid.AutoSize = true;
+            this.labelPaid.BackColor = System.Drawing.Color.Transparent;
             this.labelPaid.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPaid.Location = new System.Drawing.Point(188, 346);
             this.labelPaid.Name = "labelPaid";
@@ -251,6 +253,7 @@
             // labelID
             // 
             this.labelID.AutoSize = true;
+            this.labelID.BackColor = System.Drawing.Color.Transparent;
             this.labelID.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelID.Location = new System.Drawing.Point(188, 164);
             this.labelID.Name = "labelID";
@@ -260,7 +263,7 @@
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.AliceBlue;
+            this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.labelBalance);
             this.panel1.Location = new System.Drawing.Point(414, 433);
@@ -290,7 +293,8 @@
             // 
             // panelPrint
             // 
-            this.panelPrint.Controls.Add(this.pictureBox2);
+            this.panelPrint.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panelPrint.BackgroundImage")));
+            this.panelPrint.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panelPrint.Controls.Add(this.panel1);
             this.panelPrint.Controls.Add(this.labelID);
             this.panelPrint.Controls.Add(this.label12);
@@ -308,25 +312,15 @@
             this.panelPrint.Controls.Add(this.label7);
             this.panelPrint.Location = new System.Drawing.Point(18, 61);
             this.panelPrint.Name = "panelPrint";
-            this.panelPrint.Size = new System.Drawing.Size(763, 471);
+            this.panelPrint.Size = new System.Drawing.Size(763, 603);
             this.panelPrint.TabIndex = 325;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox2.BackgroundImage")));
-            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox2.Location = new System.Drawing.Point(293, 0);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(179, 129);
-            this.pictureBox2.TabIndex = 326;
-            this.pictureBox2.TabStop = false;
             // 
             // frmPrntRow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(777, 537);
+            this.ClientSize = new System.Drawing.Size(777, 666);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnConfirm);
             this.Controls.Add(this.label1);
@@ -341,7 +335,6 @@
             this.panel1.PerformLayout();
             this.panelPrint.ResumeLayout(false);
             this.panelPrint.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -373,6 +366,5 @@
         private System.Windows.Forms.Label label10;
         public System.Windows.Forms.Label labelBalance;
         private System.Windows.Forms.Panel panelPrint;
-        private System.Windows.Forms.PictureBox pictureBox2;
     }
 }
